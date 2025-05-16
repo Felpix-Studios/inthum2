@@ -10,7 +10,15 @@ SENTENCES = [
     "The gun control laws in my city don’t work well. They only stop law-abiding citizens from protecting themselves, criminals still have guns. I’m no expert, but from what I’ve seen, gun control hasn’t been helpful.",
     "Gun control might stop regular Americans from buying a gun. However, on balance, it has done a lot of good, background checks can stop criminals and people with mental illness from getting guns."
 ]
-ANSWER_KEY = {0:0, 1:1, 2:1, 3:0, 4:1, 5:1}
+
+ANSWER_KEY = {
+    0:0,
+    1:1,
+    2:1,
+    3:0,
+    4:1,
+    5:1
+}
 
 
 def main():
@@ -71,6 +79,10 @@ def main():
   
     """)
 
+
+
+
+
     if "ih_responses" not in st.session_state:
         st.session_state.ih_responses = {}
     if "ih_submitted" not in st.session_state:
@@ -83,9 +95,11 @@ def main():
         st.session_state.ih_highlights.clear()
         st.session_state.ih_submitted = False
 
+        
+    st.markdown("### Questions")
     if not st.session_state.ih_submitted:
         for idx, sentence in enumerate(SENTENCES):
-            st.markdown(f"<div class='centered' style = 'margin-bottom:1rem'>{sentence}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='centered' style = 'margin-bottom:1rem; text-align:left;'>{sentence}</div>", unsafe_allow_html=True)
 
 
             
@@ -128,12 +142,15 @@ def main():
 
             st.markdown("---")
 
-        if st.button("Submit Responses"):
-            if len(st.session_state.ih_responses) < len(SENTENCES):
-                st.error("Please answer all sentences.")
-            else:
-                st.session_state.ih_submitted = True
-                st.rerun()
+
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+          if st.button("Submit Responses", use_container_width=True, key="submit_ih"):
+              if len(st.session_state.ih_responses) < len(SENTENCES):
+                  st.error("Please answer all sentences.")
+              else:
+                  st.session_state.ih_submitted = True
+                  st.rerun()
 
     else:
         score = sum(1 for i, ans in st.session_state.ih_responses.items() if ans == ANSWER_KEY[i])
