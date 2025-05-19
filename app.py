@@ -183,6 +183,11 @@ def main():
 
       if st.button("Click here to see the answer key."):
         st.markdown("### Answer Key")
+        st.write("""
+                 Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs.
+
+                 Intellectually humble statements will use key phrases like “I'm no expert” and “however” to depict uncertainty and openness to other viewpoints. Words like “obviously” do not demonstrate intellectual humility.
+        """)
         for idx, sentence in enumerate(SENTENCES):
             # Get the keywords for the current sentence
             keywords = HUMBLE_KEYWORDS.get(idx, [])
