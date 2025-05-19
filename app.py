@@ -101,9 +101,10 @@ def main():
         for idx, sentence in enumerate(SENTENCES):
             st.markdown(f"<div class='centered' style='margin-bottom:1rem; text-align:left;'>{sentence}</div>", unsafe_allow_html=True)
 
-            st.markdown("<div style='margin-top: 1rem;'>", unsafe_allow_html=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div style='margin-top: 1rem; font-weight:600; background: red;'>", unsafe_allow_html=True)
+            
             annotations = text_highlighter(sentence)
+            st.markdown("</div>", unsafe_allow_html=True)
             flat = [ann for group in (annotations or []) for ann in group]
             selected = [a["label"] for a in flat if "label" in a]
             if selected:
@@ -159,19 +160,31 @@ def main():
               correct_highlight_score += 1
 
       st.markdown(f"## Your Total Score: {correct_label_score + correct_highlight_score} / {2 * total}")
-      st.markdown(f"- **Label Match Score:** {correct_label_score} / {total}")
-      st.markdown(f"- **Highlight Match Score:** {correct_highlight_score} / {total}")
+      st.markdown(f"You correctly identified whether a statement was intellectually humble for {correct_label_score} statements.")
+      st.markdown(f"You correctly identified {correct_highlight_score} key words/phrases.")
 
-      if correct_label_score + correct_highlight_score == 2 * total:
-          st.success("Perfect! Excellent sensitivity to humility and rationale.")
-      elif correct_label_score >= total // 2:
-          st.info("Pretty good! You’re developing strong awareness.")
-      else:
-          st.warning("Keep reflecting on humility and evidence.")
+
+
+
+
+      total_score = correct_label_score + correct_highlight_score
+
+      # Provide detailed feedback based on the score range
+      if total_score == 0:
+          st.error("Let's take a closer look. You didn’t identify any intellectually humble statements or key phrases this time. That’s okay—this tool is here to help you train your intellectual humility. Intellectual humility often shows up in phrases like “I’m no expert,” “however,” or when someone shows openness to other views. Try again and see if you can spot those signals!")
+      elif 1 <= total_score <= 6:
+          st.warning("You're on the right track! You identified some of the intellectually humble statements and the key phrases associated with humility. This shows you're beginning to recognize what intellectual humility sounds like. Look for language that shows uncertainty, openness, or a willingness to admit you’re wrong.")
+      elif 7 <= total_score <= 11:
+          st.info("Good work! You’re picking up on many of the key patterns in intellectually humble language. You noticed important phrases like “I’m no expert” and “however.” A little more attention to detail, and you’ll be nailing it consistently!")
+      elif total_score == 12:
+          st.success("Excellent job! Perfect score—well done! You are able to identify the key patterns in intellectual humble language. Using phrases like “I’m no expert” and “however” are hallmarks of open-mindedness and uncertainty. Keep it up!")
+
+      
 
       if st.button("Reset"):
           reset_test()
           st.rerun()
+    st.write("This tool is currently experimental and was developed with support from the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com)")
 
 if __name__ == "__main__":
     main()
