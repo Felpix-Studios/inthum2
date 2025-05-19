@@ -97,8 +97,9 @@ def main():
 
     
     if not st.session_state.ih_submitted:
-        st.markdown("### Questions")
+        st.markdown("### Statements")
         for idx, sentence in enumerate(SENTENCES):
+            sentence = f"{idx + 1}. {sentence}"
             st.markdown(f"<div class='centered' style='margin-bottom:1rem; text-align:left;'>{sentence}</div>", unsafe_allow_html=True)
 
             st.markdown("<div style='margin-top: 1rem; font-weight:600; background: red;'>", unsafe_allow_html=True)
