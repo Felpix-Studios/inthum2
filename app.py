@@ -77,8 +77,8 @@ def main():
     Intellectual humility reflects a mindset that recognizes that our beliefs and ideas could be wrong. Being intellectually humble means: 
 
     - Respecting the beliefs or ideas of others
-    - Considering counterpoints to one’s own views
-    - Admitting limitations or uncertainty in one’s own beliefs 
+    - Considering counterpoints to one's own views
+    - Admitting limitations or uncertainty in one's own beliefs 
 
     You will now be shown six statements relating to gun control, climate change, or immigration. For each statement, identify if the statement is intellectually humble or not. Then, use the highlighter tool to select the key words/phrases that informed your decision. 
     """)
@@ -99,8 +99,7 @@ def main():
     if not st.session_state.ih_submitted:
         st.markdown("### Statements")
         for idx, sentence in enumerate(SENTENCES):
-            sentence = f"{idx + 1}. {sentence}"
-            st.markdown(f"<div class='centered' style='margin-bottom:1rem; text-align:left;'>{sentence}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='centered' style='margin-bottom:1rem; text-align:left;'>{idx + 1}. {sentence}</div>", unsafe_allow_html=True)
 
             st.markdown("<div style='margin-top: 1rem; font-weight:600; background: red;'>", unsafe_allow_html=True)
             
@@ -172,13 +171,38 @@ def main():
 
       # Provide detailed feedback based on the score range
       if total_score == 0:
-          st.error("Let's take a closer look. You didn’t identify any intellectually humble statements or key phrases this time. That’s okay—this tool is here to help you train your intellectual humility. Intellectual humility often shows up in phrases like “I’m no expert,” “however,” or when someone shows openness to other views. Try again and see if you can spot those signals!")
+          st.error("**Let's take a closer look.** \n\n You didn't identify any intellectually humble statements or key phrases this time. That's okay—this tool is here to help you train your intellectual humility. Intellectual humility often shows up in phrases like “I'm no expert,” “however,” or when someone shows openness to other views. Try again and see if you can spot those signals!")
       elif 1 <= total_score <= 6:
-          st.warning("You're on the right track! You identified some of the intellectually humble statements and the key phrases associated with humility. This shows you're beginning to recognize what intellectual humility sounds like. Look for language that shows uncertainty, openness, or a willingness to admit you’re wrong.")
+          st.warning("**You're on the right track!** \n\n You identified some of the intellectually humble statements and the key phrases associated with humility. This shows you're beginning to recognize what intellectual humility sounds like. Look for language that shows uncertainty, openness, or a willingness to admit you're wrong.")
       elif 7 <= total_score <= 11:
-          st.info("Good work! You’re picking up on many of the key patterns in intellectually humble language. You noticed important phrases like “I’m no expert” and “however.” A little more attention to detail, and you’ll be nailing it consistently!")
+          st.info("**Good work!** \n\n You're picking up on many of the key patterns in intellectually humble language. You noticed important phrases like “I'm no expert” and “however.” A little more attention to detail, and you'll be nailing it consistently!")
       elif total_score == 12:
-          st.success("Excellent job! Perfect score—well done! You are able to identify the key patterns in intellectual humble language. Using phrases like “I’m no expert” and “however” are hallmarks of open-mindedness and uncertainty. Keep it up!")
+          st.success("**Excellent job!** \n\n Perfect score—well done! You are able to identify the key patterns in intellectual humble language. Using phrases like “I'm no expert” and “however” are hallmarks of open-mindedness and uncertainty. Keep it up!")
+
+
+
+      if st.button("Click here to see the answer key."):
+        st.markdown("### Answer Key")
+        for idx, sentence in enumerate(SENTENCES):
+            # Get the keywords for the current sentence
+            keywords = HUMBLE_KEYWORDS.get(idx, [])
+
+            # Bold the keywords inside the sentence using Markdown
+            for kw in keywords:
+                sentence = sentence.replace(kw, f"**{kw}**")
+
+            # Display the sentence with bolded keywords
+            st.markdown(f"{idx + 1}. {sentence}")
+
+            # Display whether the sentence is intellectually humble or not
+            if ANSWER_KEY[idx] == 1:
+                st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
+            else:
+                st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
+
+            st.markdown("---")
+
+
 
       
 
