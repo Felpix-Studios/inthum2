@@ -101,16 +101,7 @@ def main():
         for idx, sentence in enumerate(SENTENCES):
             st.markdown(f"<div class='centered' style='margin-bottom:1rem; text-align:left;'>{idx + 1}. {sentence}</div>", unsafe_allow_html=True)
 
-            st.markdown("<div style='margin-top: 1rem; font-weight:600; background: red;'>", unsafe_allow_html=True)
             
-            annotations = text_highlighter(sentence)
-            st.markdown("</div>", unsafe_allow_html=True)
-            flat = [ann for group in (annotations or []) for ann in group]
-            selected = [a["label"] for a in flat if "label" in a]
-            if selected:
-                st.session_state.ih_highlights[idx] = selected
-            else:
-                st.session_state.ih_highlights.pop(idx, None)
 
             if st.session_state.ih_responses.get(idx) == 1:
                 st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
@@ -125,6 +116,20 @@ def main():
                 if st.button("This sentence is not intellectually humble", key=f"no_{idx}"):
                     st.session_state.ih_responses[idx] = 0
                     st.rerun()
+            
+
+            st.markdown("<div style='margin-top: 1rem; font-weight:600;'>", unsafe_allow_html=True)
+            st.write("**Now, please highlight the key words/phrases that informed your decision.**")
+            
+            
+            annotations = text_highlighter(sentence)
+            st.markdown("</div>", unsafe_allow_html=True)
+            flat = [ann for group in (annotations or []) for ann in group]
+            selected = [a["label"] for a in flat if "label" in a]
+            if selected:
+                st.session_state.ih_highlights[idx] = selected
+            else:
+                st.session_state.ih_highlights.pop(idx, None)
 
             if idx in st.session_state.ih_highlights:
                 words = st.session_state.ih_highlights[idx]
@@ -187,6 +192,8 @@ def main():
                  Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs.
 
                  Intellectually humble statements will use key phrases like “I'm no expert” and “however” to depict uncertainty and openness to other viewpoints. Words like “obviously” do not demonstrate intellectual humility.
+
+                 The bolded words in the sentences below are the key phrases that indicate intellectual humility and the button below each sentence indicates whether the sentence is intellectually humble or not.
         """)
         for idx, sentence in enumerate(SENTENCES):
             # Get the keywords for the current sentence
@@ -204,6 +211,12 @@ def main():
                 st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
             else:
                 st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
+
+            user_answer = st.session_state.ih_responses.get(idx, "No answer")
+            user_highlights = st.session_state.ih_highlights.get(idx, [])
+            user_highlights_text = ", ".join(user_highlights) if user_highlights else "No highlights"
+            st.write(f"You answered: {'humble' if user_answer == 1 else 'not humble' if user_answer == 0 else 'No answer'}")
+            st.write(f"You highlighted: {user_highlights_text}")
 
             st.markdown("---")
 
