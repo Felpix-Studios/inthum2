@@ -11,7 +11,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -205,3 +204,17 @@ Pipfile
 st_aggrid/frontend/.yarn/install-state.gz
 quick_examples*
 test/*
+
+
+# Ensure the src directory is included
+!/streamlit-annotation-tools/src/
+
+# Ensure the frontend directory is included
+!/streamlit-annotation-tools/src/streamlit_annotation_tools/frontend/
+
+# Ensure the build directory is included
+!/streamlit-annotation-tools/src/streamlit_annotation_tools/frontend/build/
+
+# Ensure TypeScript files are included
+!*.ts
+!*.tsx
