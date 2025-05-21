@@ -218,3 +218,5 @@ test/*
 # Ensure TypeScript files are included
 !*.ts
 !*.tsx
+
+!/streamlit-annotation-tools/src/streamlit_annotation_tools/frontend/build/
