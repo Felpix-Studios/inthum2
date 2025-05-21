@@ -78,10 +78,20 @@ def main():
 
     - Respecting the beliefs or ideas of others
     - Considering counterpoints to one's own views
-    - Admitting limitations or uncertainty in one's own beliefs 
-
-    You will now be shown six statements relating to gun control, climate change, or immigration. For each statement, identify if the statement is intellectually humble or not. Then, highlight the sentence with your curosr to select the key words/phrases that informed your decision. 
+    - Admitting limitations or uncertainty in one's own beliefs
+             
+    Let's practice identifying intellectually humble statements.
+             
+    Based on the definition above, which of the following statements is intellectually humble:
     """)
+    
+    if st.button("I think that the new tax plan is a really bad idea, but I’m not sure.", key="practice_a"):
+      st.success("Correct! The statement shows some uncertainty and openness.")
+    if st.button("The new tax plan is terrible and anyone who disagrees needs to read up on the issue.", key="practice_b"):
+      st.error("Not quite. This statement shows certainty and dismissiveness.")
+
+
+    st.write("You will now be shown six statements relating to gun control, climate change, or immigration. For each statement, identify if the statement is intellectually humble or not. Then, highlight the sentence with your cursor to select the key words/phrases that informed your decision.")
 
     if "ih_responses" not in st.session_state:
         st.session_state.ih_responses = {}
