@@ -99,9 +99,16 @@ def main():
     if not st.session_state.ih_submitted:
         st.markdown("### Statements")
         for idx, sentence in enumerate(SENTENCES):
-            st.markdown(f"<div class='centered' style='margin-bottom:1rem; text-align:left;'>{idx + 1}. {sentence}</div>", unsafe_allow_html=True)
+            sentence = f"{idx+1}. {sentence}"
 
-            
+            annotations = text_highlighter(sentence)
+            st.markdown("</div>", unsafe_allow_html=True)
+            flat = [ann for group in (annotations or []) for ann in group]
+            selected = [a["label"] for a in flat if "label" in a]
+            if selected:
+                st.session_state.ih_highlights[idx] = selected
+            else:
+                st.session_state.ih_highlights.pop(idx, None)
 
             if st.session_state.ih_responses.get(idx) == 1:
                 st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
@@ -118,18 +125,9 @@ def main():
                     st.rerun()
             
 
-            st.markdown("<div style='margin-top: 1rem; font-weight:600;'>", unsafe_allow_html=True)
-            st.write("**Now, please highlight the key words/phrases that informed your decision.**")
+            st.markdown("<div style='margin-top: 1rem; font-weight:600;'>", unsafe_allow_html=True)            
             
             
-            annotations = text_highlighter(sentence)
-            st.markdown("</div>", unsafe_allow_html=True)
-            flat = [ann for group in (annotations or []) for ann in group]
-            selected = [a["label"] for a in flat if "label" in a]
-            if selected:
-                st.session_state.ih_highlights[idx] = selected
-            else:
-                st.session_state.ih_highlights.pop(idx, None)
 
             if idx in st.session_state.ih_highlights:
                 words = st.session_state.ih_highlights[idx]
