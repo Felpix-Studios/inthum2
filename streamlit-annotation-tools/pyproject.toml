@@ -7,18 +7,17 @@ authors = ["Robin Marquet <robin.marquet@epitech.eu>"]
 license = "MIT"
 readme = "README.md"
 keywords = ["streamlit", "text", "annotation", "nlp"]
-include = ["./src/streamlit_annotation_tools/frontend/build/**/*"]
+include = [
+    "./src/streamlit_annotation_tools/frontend/build/**/*",
+    "./src/streamlit_annotation_tools/frontend/build/static/**/*"
+]
 exclude = ["**/node_modules/**/*"]
 packages = [{include = "streamlit_annotation_tools", from = "src"}]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.9.7 || >3.9.7,<4.0.0"
+python = ">=3.8,<4.0.0"
 streamlit = "^1.21.0"
-
-[tool.poetry.group.dev.dependencies]
-alfred-cli = "^2.2.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
