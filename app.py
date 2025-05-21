@@ -80,7 +80,7 @@ def main():
     - Considering counterpoints to one's own views
     - Admitting limitations or uncertainty in one's own beliefs 
 
-    You will now be shown six statements relating to gun control, climate change, or immigration. For each statement, identify if the statement is intellectually humble or not. Then, use the highlighter tool to select the key words/phrases that informed your decision. 
+    You will now be shown six statements relating to gun control, climate change, or immigration. For each statement, identify if the statement is intellectually humble or not. Then, highlight the sentence with your curosr to select the key words/phrases that informed your decision. 
     """)
 
     if "ih_responses" not in st.session_state:

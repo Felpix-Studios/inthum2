@@ -109,18 +109,20 @@ const Highlighter: React.FC = () => {
 
   return (
     <div>
+
       <div className="flex flex-row flex-wrap">
         <div
-          className="flex flex-wrap justify-between items-center cursor-pointer py-1 px-3 mr-2 mb-2 rounded text-white text-base bg-primary hover:bg-secondary"
+          className="flex flex-wrap justify-between items-center cursor-pointer py-1 px-3 rounded text-white text-base "
           onClick={addReference}
         >
-          <span>+</span>
+          <span style = {{ display: "none"}}>+</span>
         </div>
         {state.highlights.map((reference, index) => (
           <span
+            style = {{ display: "none"}}
             key={index}
             className={
-              "flex flex-wrap justify-between items-center cursor-pointer py-1 px-3 mr-2 mb-2 rounded text-base" +
+              "flex flex-wrap justify-between items-center cursor-pointer rounded text-base" +
               (state.selectedReference === index
                 ? " bg-primary hover:bg-secondary text-white"
                 : " border border-primary text-primary hover:bg-primary hover:text-white")
@@ -131,20 +133,18 @@ const Highlighter: React.FC = () => {
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 ml-3 hover:text-gray-300"
-              viewBox="0 0 20 20"
+              viewBox="0 0 0 0"
+              style={{ display: "none"}}
               fill="currentColor"
               onClick={() => removeReference(index)}
             >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              />
+              
             </svg>
           </span>
         ))}
       </div>
       
-      <div id="actual-text" className="mt-5 h-full text-left text-[1.2rem] font-semibold" onMouseUp={handleSelection} onTouchEnd={handleSelection}>
+      <div id="actual-text" className="mt-0 h-full text-left text-[1.2rem] font-semibold" onMouseUp={handleSelection} onTouchEnd={handleSelection}>
         {state.actual_text}
       </div>
     </div>
