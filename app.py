@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_annotation_tools import text_highlighter
 import re
 
+# Define constants
 PRACTICE = []
 SENTENCES = [
     "There are obviously too many immigrants entering our country who do not speak English, use more welfare, and take jobs from hard-working Americans.",
@@ -21,7 +22,6 @@ ANSWER_KEY = {
     5: 1
 }
 
-# Keywords or phrases that indicate intellectual humility (per sentence index)
 HUMBLE_KEYWORDS = {
     0: ["obviously"],
     1: ["I'm no expert"],
@@ -31,7 +31,22 @@ HUMBLE_KEYWORDS = {
     5: ["However"]
 }
 
-def main():
+# Initialize session state for page navigation
+if "current_page" not in st.session_state:
+    st.session_state.current_page = "Intro"
+
+# Initialize session state for example highlights
+if "example_highlights" not in st.session_state:
+    st.session_state.example_highlights = []
+
+# Function to reset the training page
+def reset_training():
+    st.session_state.ih_responses = {}
+    st.session_state.ih_highlights = {}
+    st.session_state.ih_submitted = False
+
+# Intro Page
+def intro_page():
     st.markdown("""
     <style>
       .force-active-button {
@@ -66,32 +81,155 @@ def main():
       }
     </style>
     """, unsafe_allow_html=True)
-
-    logo_path = "new_plab_logo.png"
-    st.logo(logo_path, size="large")
     st.title("Train Your Intellectual Humility")
-    st.image(logo_path, width=260)
+
+    st.image("new_plab_logo.png", width=260)
+
+
     st.write("""
     **What is intellectual humility?**
 
     Intellectual humility reflects a mindset that recognizes that our beliefs and ideas could be wrong. Being intellectually humble means: 
 
-    - Respecting the beliefs or ideas of others
-    - Considering counterpoints to one's own views
-    - Admitting limitations or uncertainty in one's own beliefs
-             
-    Let's practice identifying intellectually humble statements.
-             
-    Based on the definition above, which of the following statements is intellectually humble:
+    - Being open to new ideas
+    - Being willing to reconsider your beliefs when presented with new information or perspectives
+    - Recognizing that you might not always have all the answers
+    - Acknowledging that your knowledge and understanding can have limitations
+    - Challenging your assumptions, biases, and level of certainty about something or someone
+      
+    **Why should I care about intellectual humility?**
+    Research suggests that [intellectual humility](https://www.templeton.org/news/what-is-intellectual-humility) may improve well-being, enhance tolerance from other perspectives, and promote inquiry and learning. Understanding our intellectual humility is an important step in learning about our own blindspots. 
+
+    To start learning how to recognize intellectual humility in political statements, try our interactive tool here.
+
     """)
+
+    if st.button("Next"):
+        st.session_state.current_page = "Example"
+        st.rerun()
+
+# Example Page
+def example_page():
+    st.markdown("""
+    <style>
+      .force-active-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 400;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+        min-height: 2.5rem;
+        margin: 0px;
+        line-height: 1.6;
+        text-transform: none;
+        font-size: inherit;
+        font-family: inherit;
+        color: white !important;
+        cursor: default;
+        background-color: rgb(255, 75, 75) !important;
+        border: 1px solid rgb(255, 75, 75) !important;
+        box-shadow: 0 0 0 0.1rem rgb(255, 75, 75,0.6) !important;
+      }
+      button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
+      div[data-testid="stButton"] { display: inline-block; }
+      .centered { text-align: center; font-size: 1.2rem; font-weight: 600; margin-top: 1rem; }
+      .stMainBlockContainer { max-width: 72rem; }
+      .highlight-section {
+        text-align: center !important;
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+      }
+    </style>
+    """, unsafe_allow_html=True)
+    st.title("Practice Identifying Intellectual Humility")
+    st.write("""
+    Let’s walk through an example before your training! 
+
+    You will be asked to decide if a statement is intellectually humble or not. Then, you will be asked to use your cursor to identify the key words and phrases that informed your decision. 
+
+    The following is an example of how you might highlight a statement that is intellectually humble: 
+    """)
+
+    st.success("**I think** that the government needs to spend more on building roads and bridges. **I'm no expert**, but the roads around me are in really poor shape.")
+
+    st.write("The following is an example of how you might highlight a statement that is not intellectually humble: ")
+
+    st.error("The government **definitely** needs to spend more on roads and bridges. **I can't imagine** a higher priority than helping people get where they want to go. ")
+         
+    st.write("Now, let’s practice highlighting text. Please use your cursor to select the words 'I think' and 'I'm no expert,' which make the statement intellectually humble. ")
+
+    example_sentence = "I think that the government needs to spend more on building roads and bridges. I'm no expert, but the roads around me are in really poor shape."
+    example_annotations = ["I think", "I'm no expert"]
+    example_highlights = text_highlighter(example_sentence)
+
+
+    if example_highlights is not None:
+        flat = [ann for group in (example_highlights or []) for ann in group]
+        selected = [a["label"] for a in flat if "label" in a]
+        if selected:
+            st.session_state.example_highlights = selected
+        else:
+            st.session_state.example_highlights = []
+
+    # Check if all example annotations are present in the highlights
+    highlights = st.session_state.example_highlights
+    if all(kw in highlights for kw in example_annotations):
+      st.success("Great job! The relevant phrases are 'I think' and 'I'm no expert,' which indicate uncertainty in one's beliefs.")
+
+      st.write("You're ready to start the training! Please click the button below to proceed.")
+
+      if st.button("Next"):
+        st.session_state.current_page = "Training"
+        st.rerun()
+        
+
+
     
-    if st.button("I think that the new tax plan is a really bad idea, but I’m not sure.", key="practice_a"):
-      st.success("Correct! The statement shows some uncertainty and openness.")
-    if st.button("The new tax plan is terrible and anyone who disagrees needs to read up on the issue.", key="practice_b"):
-      st.error("Not quite. This statement shows certainty and dismissiveness.")
+    
 
-
-    st.write("You will now be shown six statements relating to gun control, climate change, or immigration. For each statement, identify if the statement is intellectually humble or not. Then, highlight the sentence with your cursor to select the key words/phrases that informed your decision.")
+# Training Page
+def training_page():
+    st.markdown("""
+    <style>
+      .force-active-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 400;
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+        min-height: 2.5rem;
+        margin: 0px;
+        line-height: 1.6;
+        text-transform: none;
+        font-size: inherit;
+        font-family: inherit;
+        color: white !important;
+        cursor: default;
+        background-color: rgb(255, 75, 75) !important;
+        border: 1px solid rgb(255, 75, 75) !important;
+        box-shadow: 0 0 0 0.1rem rgb(255, 75, 75,0.6) !important;
+      }
+      button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
+      div[data-testid="stButton"] { display: inline-block; }
+      .centered { text-align: center; font-size: 1.2rem; font-weight: 600; margin-top: 1rem; }
+      .stMainBlockContainer { max-width: 72rem; }
+      .highlight-section {
+        text-align: center !important;
+        font-size: 1.2rem !important;
+        font-weight: 600 !important;
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+      }
+    </style>
+    """, unsafe_allow_html=True)
+    st.title("Training: Identify Intellectual Humility")
+    st.write("""
+    You will be shown several political statements. You will be asked to complete two tasks. 1) Rate the statement as intellectually humble or not intellectually humble. 2) Use your cursor to highlight specific words or phrases that make the statement intellectually humble or not intellectually humble. The purpose of these tasks is to start learning what intellectually humble political statements look like! 
+    """)
 
     if "ih_responses" not in st.session_state:
         st.session_state.ih_responses = {}
@@ -100,12 +238,6 @@ def main():
     if "ih_highlights" not in st.session_state:
         st.session_state.ih_highlights = {}
 
-    def reset_test():
-        st.session_state.ih_responses.clear()
-        st.session_state.ih_highlights.clear()
-        st.session_state.ih_submitted = False
-
-    
     if not st.session_state.ih_submitted:
         st.markdown("### Statements")
         for idx, sentence in enumerate(SENTENCES):
@@ -134,11 +266,8 @@ def main():
                     st.session_state.ih_responses[idx] = 0
                     st.rerun()
             
-
             st.markdown("<div style='margin-top: 1rem; font-weight:600;'>", unsafe_allow_html=True)            
             
-            
-
             if idx in st.session_state.ih_highlights:
                 words = st.session_state.ih_highlights[idx]
                 st.markdown(f"**Your highlight:** {' | '.join(words)}")
@@ -156,86 +285,85 @@ def main():
                     st.session_state.ih_submitted = True
                     st.rerun()
     else:
-      total = len(SENTENCES)
-      correct_label_score = sum(1 for i, ans in st.session_state.ih_responses.items() if ans == ANSWER_KEY[i])
-      correct_highlight_score = 0
+        total = len(SENTENCES)
+        correct_label_score = sum(1 for i, ans in st.session_state.ih_responses.items() if ans == ANSWER_KEY[i])
+        correct_highlight_score = 0
 
-      for i in range(total):
-          # Extract labels from highlighter output
-          raw_annotations = st.session_state.ih_highlights.get(i, [])
-          highlighted_labels = [label.lower() for label in raw_annotations]
+        for i in range(total):
+            raw_annotations = st.session_state.ih_highlights.get(i, [])
+            highlighted_labels = [label.lower() for label in raw_annotations]
+            keywords = [kw.lower() for kw in HUMBLE_KEYWORDS.get(i, [])]
+            if any(kw in label for label in highlighted_labels for kw in keywords):
+                correct_highlight_score += 1
 
-          # Keywords for the sentence
-          keywords = [kw.lower() for kw in HUMBLE_KEYWORDS.get(i, [])]
+        st.markdown(f"## Your Total Score: {correct_label_score + correct_highlight_score} / {2 * total}")
+        st.markdown(f"You correctly identified whether a statement was intellectually humble for {correct_label_score} statements.")
+        st.markdown(f"You correctly identified {correct_highlight_score} key words/phrases.")
 
-          # Scoring if any keyword is found in highlighted labels
-          if any(kw in label for label in highlighted_labels for kw in keywords):
-              correct_highlight_score += 1
+        total_score = correct_label_score + correct_highlight_score
 
-      st.markdown(f"## Your Total Score: {correct_label_score + correct_highlight_score} / {2 * total}")
-      st.markdown(f"You correctly identified whether a statement was intellectually humble for {correct_label_score} statements.")
-      st.markdown(f"You correctly identified {correct_highlight_score} key words/phrases.")
-
-
-
-
-
-      total_score = correct_label_score + correct_highlight_score
-
-      # Provide detailed feedback based on the score range
-      if total_score == 0:
+        if total_score == 0:
           st.error("**Let's take a closer look.** \n\n You didn't identify any intellectually humble statements or key phrases this time. That's okay—this tool is here to help you train your intellectual humility. Intellectual humility often shows up in phrases like “I'm no expert,” “however,” or when someone shows openness to other views. Try again and see if you can spot those signals!")
-      elif 1 <= total_score <= 6:
+        elif 1 <= total_score <= 6:
           st.warning("**You're on the right track!** \n\n You identified some of the intellectually humble statements and the key phrases associated with humility. This shows you're beginning to recognize what intellectual humility sounds like. Look for language that shows uncertainty, openness, or a willingness to admit you're wrong.")
-      elif 7 <= total_score <= 11:
+        elif 7 <= total_score <= 11:
           st.info("**Good work!** \n\n You're picking up on many of the key patterns in intellectually humble language. You noticed important phrases like “I'm no expert” and “however.” A little more attention to detail, and you'll be nailing it consistently!")
-      elif total_score == 12:
+        elif total_score == 12:
           st.success("**Excellent job!** \n\n Perfect score—well done! You are able to identify the key patterns in intellectual humble language. Using phrases like “I'm no expert” and “however” are hallmarks of open-mindedness and uncertainty. Keep it up!")
 
 
+        # Add a button to show the answer key
+        if "show_answer_key" not in st.session_state:
+            st.session_state.show_answer_key = False
 
-      if st.button("Click here to see the answer key."):
-        st.markdown("### Answer Key")
-        st.write("""
-                 Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs.
+        if st.button("Click here to see the answer key."):
+            st.session_state.show_answer_key = True
 
-                 Intellectually humble statements will use key phrases like “I'm no expert” and “however” to depict uncertainty and openness to other viewpoints. Words like “obviously” do not demonstrate intellectual humility.
+        if st.session_state.show_answer_key:
+            st.markdown("### Answer Key")
+            st.write("""
+                     Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs.
 
-                 The bolded words in the sentences below are the key phrases that indicate intellectual humility and the button below each sentence indicates whether the sentence is intellectually humble or not.
-        """)
-        for idx, sentence in enumerate(SENTENCES):
-            # Get the keywords for the current sentence
-            keywords = HUMBLE_KEYWORDS.get(idx, [])
+                     Intellectually humble statements will use key phrases like “I'm no expert” and “however” to depict uncertainty and openness to other viewpoints. Words like “obviously” do not demonstrate intellectual humility.
 
-            # Bold the keywords inside the sentence using Markdown
-            for kw in keywords:
-                sentence = sentence.replace(kw, f"**{kw}**")
+                     The bolded words in the sentences below are the key phrases that indicate intellectual humility and the button below each sentence indicates whether the sentence is intellectually humble or not.
+            """)
+            for idx, sentence in enumerate(SENTENCES):
+                # Get the keywords for the current sentence
+                keywords = HUMBLE_KEYWORDS.get(idx, [])
 
-            # Display the sentence with bolded keywords
-            st.markdown(f"{idx + 1}. {sentence}")
+                # Bold the keywords inside the sentence using Markdown
+                for kw in keywords:
+                    sentence = sentence.replace(kw, f"**{kw}**")
 
-            # Display whether the sentence is intellectually humble or not
-            if ANSWER_KEY[idx] == 1:
-                st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
-            else:
-                st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
+                # Display the sentence with bolded keywords
+                st.markdown(f"{idx + 1}. {sentence}")
 
-            user_answer = st.session_state.ih_responses.get(idx, "No answer")
-            user_highlights = st.session_state.ih_highlights.get(idx, [])
-            user_highlights_text = ", ".join(user_highlights) if user_highlights else "No highlights"
-            st.write(f"You answered: {'humble' if user_answer == 1 else 'not humble' if user_answer == 0 else 'No answer'}")
-            st.write(f"You highlighted: {user_highlights_text}")
+                # Display whether the sentence is intellectually humble or not
+                if ANSWER_KEY[idx] == 1:
+                    st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
+                else:
+                    st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
 
-            st.markdown("---")
+                # Display the user's answer and highlights
+                user_answer = st.session_state.ih_responses.get(idx, "No answer")
+                user_highlights = st.session_state.ih_highlights.get(idx, [])
+                user_highlights_text = ", ".join(user_highlights) if user_highlights else "No highlights"
+                st.write(f"You answered: {'humble' if user_answer == 1 else 'not humble' if user_answer == 0 else 'No answer'}")
+                st.write(f"You highlighted: {user_highlights_text}")
+
+                st.markdown("---")
 
 
 
-      
+        if st.button("Reset Training"):
+            reset_training()
+            st.rerun()
 
-      if st.button("Reset"):
-          reset_test()
-          st.rerun()
-    st.write("This tool is currently experimental and was developed with support from the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com)")
-
-if __name__ == "__main__":
-    main()
+# Render the appropriate page based on the current state
+if st.session_state.current_page == "Intro":
+    intro_page()
+elif st.session_state.current_page == "Example":
+    example_page()
+elif st.session_state.current_page == "Training":
+    training_page()
