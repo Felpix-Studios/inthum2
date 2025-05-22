@@ -25,10 +25,10 @@ ANSWER_KEY = {
 HUMBLE_KEYWORDS = {
     0: ["obviously"],
     1: ["I'm no expert"],
-    2: ["However"],
+    2: ["However, on balance"],
     3: ["obviously"],
     4: ["I'm no expert"],
-    5: ["However"]
+    5: ["However, on balance"]
 }
 
 # Initialize session state for page navigation
@@ -44,6 +44,25 @@ def reset_training():
     st.session_state.ih_responses = {}
     st.session_state.ih_highlights = {}
     st.session_state.ih_submitted = False
+
+def is_valid_highlight(highlight, keyword):
+    """
+    Check if the highlight is a valid match for the keyword.
+    - Allows for fuzzy matching.
+    - Ensures the highlight is not excessively long.
+    """
+    # Remove punctuation and normalize case
+    highlight_clean = re.sub(r"[^\w\s]", "", highlight.strip().lower())
+    keyword_clean = re.sub(r"[^\w\s]", "", keyword.strip().lower())
+
+    # Check if the keyword is in the highlight or vice versa
+    is_fuzzy_match = keyword_clean in highlight_clean or highlight_clean in keyword_clean
+
+    # Ensure the highlight is not excessively long (e.g., no more than 1.5x the keyword length)
+    max_length = len(keyword_clean) * 1.5
+    is_reasonable_length = len(highlight_clean) <= max_length
+
+    return is_fuzzy_match and is_reasonable_length
 
 # Intro Page
 def intro_page():
@@ -174,9 +193,8 @@ def example_page():
         else:
             st.session_state.example_highlights = []
 
-    # Check if all example annotations are present in the highlights
     highlights = st.session_state.example_highlights
-    if all(kw in highlights for kw in example_annotations):
+    if all(any(is_valid_highlight(h, kw) for h in highlights) for kw in example_annotations):
       st.success("Great job! The relevant phrases are 'I think' and 'I'm no expert,' which indicate uncertainty in one's beliefs.")
 
       st.write("You're ready to start the training! Please click the button below to proceed.")
@@ -184,6 +202,9 @@ def example_page():
       if st.button("Next"):
         st.session_state.current_page = "Training"
         st.rerun()
+
+
+      
         
 
 
@@ -293,7 +314,7 @@ def training_page():
             raw_annotations = st.session_state.ih_highlights.get(i, [])
             highlighted_labels = [label.lower() for label in raw_annotations]
             keywords = [kw.lower() for kw in HUMBLE_KEYWORDS.get(i, [])]
-            if any(kw in label for label in highlighted_labels for kw in keywords):
+            if any(is_valid_highlight(label, kw) for label in highlighted_labels for kw in keywords):
                 correct_highlight_score += 1
 
         st.markdown(f"## Your Total Score: {correct_label_score + correct_highlight_score} / {2 * total}")
