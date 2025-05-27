@@ -7,10 +7,10 @@ PRACTICE = []
 SENTENCES = [
     "There are obviously too many immigrants entering our country who do not speak English, use more welfare, and take jobs from hard-working Americans.",
     "The immigrants in my city don't adapt well, they can't speak English and get government support for free. I'm no expert, but from what I've seen, immigration hasn't been helpful.",
-    "Immigrants can be very helpful, working jobs that Americans don't want. However, on balance, they have done a lot of harm, letting criminals and drug dealers across the border is really bad.",
-    "There are obviously too many limits on gun purchases. People have a right to self-defense and might need a gun quickly.",
-    "The gun control laws in my city don't work well. They only stop law-abiding citizens from protecting themselves, criminals still have guns. I'm no expert, but from what I've seen, gun control hasn't been helpful.",
-    "Gun control might stop regular Americans from buying a gun. However, on balance, it has done a lot of good, background checks can stop criminals and people with mental illness from getting guns."
+    "Immigrants can be very helpful, working jobs that Americans don't want. I'm still learning, but I think they have done a lot of harm, letting criminals and drug dealers across the border is really bad.",
+    "Clearly, there are too many limits on gun purchases. People have a right to self-defense and might need a gun quickly.",
+    "Gun control laws in my city don't work well. They only stop law-abiding citizens from protecting themselves, criminals still have guns. There is no question that gun control hasn't been helpful.",
+    "It seems to me that gun control might stop regular Americans from buying a gun. From what I've seen, it has done a lot of good, background checks can stop criminals and people with mental illness from getting guns."
 ]
 
 ANSWER_KEY = {
@@ -18,17 +18,17 @@ ANSWER_KEY = {
     1: 1,
     2: 1,
     3: 0,
-    4: 1,
+    4: 0,
     5: 1
 }
 
 HUMBLE_KEYWORDS = {
     0: ["obviously"],
     1: ["I'm no expert"],
-    2: ["However, on balance"],
-    3: ["obviously"],
-    4: ["I'm no expert"],
-    5: ["However, on balance"]
+    2: ["I'm still learning"],
+    3: ["Clearly"],
+    4: ["There is no question"],
+    5: ["It seems to me", "From what I've seen"]
 }
 
 # Initialize session state for page navigation
