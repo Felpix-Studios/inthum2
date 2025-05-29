@@ -473,7 +473,7 @@ def answer_key_page():
     st.write("""
     Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs. Intellectually humble statements will use key phrases like “I'm no expert” and “I'm still learning” to depict uncertainty and openness to other viewpoints. Words like “obviously” and “clearly” do not demonstrate intellectual humility.
 
-    To read more about the effects of using intellectually humble language, read the lab's paper, [A Design-based Solution for Causal Inference with Text: Can a Language Model Be Too Large?](https://kattasa.github.io/files/design_causal_text.pdf) This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).
+    *To read more about the effects of using intellectually humble language, read the lab's paper, [A Design-based Solution for Causal Inference with Text: Can a Language Model Be Too Large?](https://kattasa.github.io/files/design_causal_text.pdf) This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).*
 
     """)
     if "show_answer_key" not in st.session_state:
