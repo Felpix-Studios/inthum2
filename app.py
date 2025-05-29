@@ -366,7 +366,7 @@ def question_page():
             st.rerun()
 
     # Step 2: Phrase selection
-    st.write('<div style="margin-top:1rem; margin-bottom:0.5rem;"><b>Select the phrase that best shows intellectual humility:</b></div>', unsafe_allow_html=True)
+    st.write('<div style="margin-top:1rem; margin-bottom:0.5rem;"><b>Select the phrase that informed your decision:</b></div>', unsafe_allow_html=True)
     options = MULTIPLE_CHOICE_OPTIONS[idx]
     selected = st.session_state.ih_phrases.get(idx)
     radio_value = options[selected] if selected is not None else None
