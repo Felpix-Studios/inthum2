@@ -347,7 +347,7 @@ def question_page():
     idx = st.session_state.current_question_idx
     total = len(SENTENCES)
     sentence = SENTENCES[idx]
-    st.title(f"Question {idx+1} of {total}")
+    st.write(f"### Question {idx+1} of {total}")
     st.markdown(f"<div class = 'centered'>{sentence}</div>", unsafe_allow_html=True)
 
     # Step 1: Humble/Not Humble selection
