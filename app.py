@@ -439,6 +439,9 @@ def answer_key_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
+      p:not(button p) {
+        margin-bottom: 0.5rem !important;
+      }
       img[data-testid="stLogo"] {
         height: 3.5rem;
       }
