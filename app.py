@@ -455,7 +455,7 @@ def answer_key_page():
     correct_phrase_score = sum(1 for i in range(total) if st.session_state.ih_phrases.get(i) == HUMBLE_KEYWORDS_ANSWER_KEY[i])
     total_score = correct_label_score + correct_phrase_score
 
-    st.markdown(f"## Your Total Score: {total_score} / {2 * total}")
+    st.markdown(f"### Your Total Score: {total_score} / {2 * total}")
     st.markdown(f"You correctly identified whether a statement was intellectually humble for {correct_label_score} statements.")
     st.markdown(f"You correctly identified {correct_phrase_score} key words/phrases.")
 
@@ -485,7 +485,7 @@ def answer_key_page():
             st.rerun()
     else:
         st.markdown("---")
-        st.markdown("## Answer Key")
+        st.markdown("### Answer Key")
         for idx, sentence in enumerate(SENTENCES):
             st.markdown(f"<div class='centered'>{idx+1}. {sentence}</div>", unsafe_allow_html=True)
             user_label = st.session_state.ih_responses.get(idx)
