@@ -208,7 +208,7 @@ def intro_page():
           st.rerun()
     
     st.write("""
-    *To read more about the effects of using intellectually humble language, read the lab's paper, “[A Design-based Solution for Causal Inference with Text: Can a Language Model Be Too Large?]”(https://kattasa.github.io/files/design_causal_text.pdf) This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).*
+    *This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).*
     """)
 
 # Example Page
