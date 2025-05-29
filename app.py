@@ -207,6 +207,7 @@ def intro_page():
           st.session_state.current_page = "Example"
           st.rerun()
     
+    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
     st.write("""
     *This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).*
     """)
