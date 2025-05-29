@@ -16,28 +16,41 @@ def scroll_to_top():
                 try {
                     if (window.parent && window.parent.document) {
                         container = window.parent.document.querySelector('.stMainBlockContainer');
+                        if (container) {
+                            console.log("Found container in parent document");
+                        } else {
+                            console.log("Container not found in parent document");
+                        }
                     }
                 } catch (e) {
                     container = document.querySelector('.stMainBlockContainer');
+                    if (container) {
+                        console.log("Found container in current document");
+                    } else {
+                        console.log("Container not found in current document");
+                    }
                 }
                 if (container) {
-                    // Use scrollIntoView with block: 'start', then force scroll to top as a fallback
                     console.log("Scrolling to top of container");
                     container.scrollIntoView({behavior: 'auto', block: 'start'});
                     setTimeout(function() {
                         if (window.parent && window.parent.scrollTo) {
+                            console.log("Scrolling parent window to top");
                             window.parent.scrollTo({ top: 0, left: 0, behavior: 'auto' });
                         }
                         if (window.scrollTo) {
+                            console.log("Scrolling current window to top");
                             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
                         }
                     }, 50);
                 } else {
                     console.log("Container not found, scrolling to top of window");
                     if (window.parent && window.parent.scrollTo) {
+                        console.log("Scrolling parent window to top (no container)");
                         window.parent.scrollTo({ top: 0, left: 0, behavior: 'auto' });
                     }
                     if (window.scrollTo) {
+                        console.log("Scrolling current window to top (no container)");
                         window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
                     }
                 }
@@ -47,7 +60,7 @@ def scroll_to_top():
             }
             setTimeout(doScroll, 50);
         </script>
-    """, height=0)
+    """, height=0, width=0)
 
 
 # Define constants
@@ -300,8 +313,42 @@ def example_page():
     
 
 def question_page():
+    
+
     st.markdown("""
     <style>
+      iframe[title="st.iframe"] {
+            display: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            min-height: 0 !important;
+            min-width: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        /* Hide the Streamlit stElementContainer wrapper for the scroll_to_top component */
+        div.stElementContainer:has(iframe[title="st.iframe"]) {
+            display: none !important;
+            height: 0 !important;
+            width: 0 !important;
+            min-height: 0 !important;
+            min-width: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
+        /* Remove gap/space from flex layout if first child is hidden */
+        section.main > div.block-container > div:first-child[style*="display: none"] {
+            display: none !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+                
       .force-active-button {
         display: inline-flex;
         align-items: center;
@@ -337,7 +384,7 @@ def question_page():
     """, unsafe_allow_html=True)
 
     st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
-    scroll_to_top()
+    
     if "current_question_idx" not in st.session_state:
         st.session_state.current_question_idx = 0
     if "ih_responses" not in st.session_state:
@@ -380,6 +427,8 @@ def question_page():
     )
     st.session_state.ih_phrases[idx] = options.index(radio) if radio in options else None
 
+    scroll_to_top()
+    
     # Step 3: Navigation
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
@@ -400,6 +449,7 @@ def question_page():
                 else:
                     st.session_state.current_page = "AnswerKey"
                     st.rerun()
+    
 
 
 
