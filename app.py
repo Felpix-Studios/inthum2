@@ -49,32 +49,32 @@ def scroll_to_top():
 
 # Define constants
 SENTENCES = [
-    "There are obviously too many immigrants entering our country who do not speak English, use more welfare, and take jobs from hard-working Americans.",
-    "The immigrants in my city don't adapt well, they can't speak English and get government support for free. I'm no expert, but from what I've seen, immigration hasn't been helpful.",
-    "Immigrants can be very helpful, working jobs that Americans don't want. I'm still learning, but I think they have done a lot of harm, letting criminals and drug dealers across the border is really bad.",
+    "There are obviously too many immigrants entering our country who do not speak English and use welfare.",
+    "The immigrants in my city don't adapt well and they can't speak English. I'm no expert, but immigration hasn't been helpful.",
+    "Immigrants can be very helpful, working jobs that Americans don't want. I'm still learning, but I also worry that they've done a lot of harm.",
     "Clearly, there are too many limits on gun purchases. People have a right to self-defense and might need a gun quickly.",
-    "Gun control laws in my city don't work well. They only stop law-abiding citizens from protecting themselves, criminals still have guns. There is no question that gun control hasn't been helpful.",
-    "It seems to me that gun control might stop regular Americans from buying a gun. Gun control has done a lot of good, background checks can stop criminals and people with mental illness from getting guns."
+    "Gun control laws in my city only stop law-abiding citizens from protecting themselves. There is no question that gun control hasn't been helpful.",
+    "I'd like to learn more, but gun control might stop regular Americans from buying a gun."
 ]
 
 MULTIPLE_CHOICE_OPTIONS = {
     0: [
         "There are obviously",
-        "Too many immigrants entering our country who do not speak English,",
-        "Use more welfare,",
-        "And take jobs from hard-working Americans"
+        "too many immigrants entering our country",
+        "who do not speak English",
+        "and use welfare"
     ],
     1: [
-        "The immigrants in my city don't adapt well,",
-        "they can't speak English and get government support for free.",
-        "I'm no expert,",
-        "but from what I've seen, immigration hasn't been helpful."
+        "The immigrants in my city don't adapt well",
+        "and they can't speak English.",
+        "I'm no expert, but",
+        "immigration hasn't been helpful."
     ],
     2: [
-        "Immigrants can be very helpful, working jobs that Americans don't want.",
-        "I'm still learning,",
-        "but I think they have done a lot of harm",
-        "letting criminals and drug dealers across the border is really bad."
+        "Immigrants can be very helpful,",
+        "working jobs that Americans don't want.",
+        "I'm still learning, but",
+        "I also worry that they've done a lot of harm"
     ],
     3: [
         "Clearly,",
@@ -83,16 +83,16 @@ MULTIPLE_CHOICE_OPTIONS = {
         "and might need a gun quickly."
     ],
     4: [
-        "Gun control laws in my city don't work well.",
-        "They only stop law-abiding citizens from protecting themselves, criminals still have guns",
+        "Gun control laws in my city only",
+        "stop law-abiding citizens from protecting themselves",
         "There is no question that",
         "gun control hasn't been helpful."
     ],
     5: [
-        "It seems to me that",
-        "gun control might stop regular Americans from buying a gun.",
-        "Gun control has done a lot of good,",
-        "background checks can stop criminals and people with mental illness from getting guns."
+        "I'd like to learn more, but",
+        "gun control might stop",
+        "regular Americans",
+        "from buying a gun."
     ]
 }
 
@@ -473,7 +473,7 @@ def answer_key_page():
     st.write("""
     Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs. Intellectually humble statements will use key phrases like “I'm no expert” and “I'm still learning” to depict uncertainty and openness to other viewpoints. Words like “obviously” and “clearly” do not demonstrate intellectual humility.
 
-    To read more about the effects of using intellectually humble language, read the lab's paper, “[A Design-based Solution for Causal Inference with Text: Can a Language Model Be Too Large?]”(https://kattasa.github.io/files/design_causal_text.pdf) This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).
+    To read more about the effects of using intellectually humble language, read the lab's paper, [A Design-based Solution for Causal Inference with Text: Can a Language Model Be Too Large?](https://kattasa.github.io/files/design_causal_text.pdf) This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).
 
     """)
     if "show_answer_key" not in st.session_state:
