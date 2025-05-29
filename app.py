@@ -184,7 +184,7 @@ def intro_page():
     st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
 
     st.write("""
-    **Learn how to recognize intellectual humility in political statements with our interactive .**
+    **Learn how to recognize intellectual humility in political statements with our interactive tool.**
 
     **What is intellectual humility?**
      - Being open to new ideas
