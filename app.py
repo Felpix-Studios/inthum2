@@ -278,7 +278,11 @@ def example_page():
         unsafe_allow_html=True
     )
 
-    st.write("Now, it's your turn!")
+    st.write("""
+    **Now, it's your turn!**
+    
+    You will be shown 6 political arguments about someone's opinion on gun policy or immigration. First, rate each statement as intellectually humble or not. Then, select the key words or phrases that informed your decision.
+    """)
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
