@@ -183,9 +183,7 @@ def intro_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
-      img[data-testid="stLogo"] {
-        height: 3.5rem;
-      }
+
       p:not(button p) {
         margin-bottom: 0.5rem !important;
       }
@@ -265,9 +263,7 @@ def example_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
-      img[data-testid="stLogo"] {
-        height: 3.5rem;
-      }
+
     </style>
     """, unsafe_allow_html=True)
     st.title("Practice Identifying Intellectual Humility")
@@ -428,7 +424,7 @@ def question_page():
     st.session_state.ih_phrases[idx] = options.index(radio) if radio in options else None
 
     scroll_to_top()
-    
+
     # Step 3: Navigation
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
@@ -494,9 +490,7 @@ def answer_key_page():
       p:not(button p) {
         margin-bottom: 0.5rem !important;
       }
-      img[data-testid="stLogo"] {
-        height: 3.5rem;
-      }
+
     </style>
     """, unsafe_allow_html=True)
     st.title("Results: Intellectual Humility Training")
