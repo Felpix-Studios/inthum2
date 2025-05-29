@@ -10,6 +10,7 @@ logo_path = "new_plab_logo.png"
 def scroll_to_top():
     components.html("""
         <script>
+            console.log("Scroll to top script loaded");
             function doScroll() {
                 var container = null;
                 try {
@@ -21,6 +22,7 @@ def scroll_to_top():
                 }
                 if (container) {
                     // Use scrollIntoView with block: 'start', then force scroll to top as a fallback
+                    console.log("Scrolling to top of container");
                     container.scrollIntoView({behavior: 'auto', block: 'start'});
                     setTimeout(function() {
                         if (window.parent && window.parent.scrollTo) {
@@ -29,8 +31,9 @@ def scroll_to_top():
                         if (window.scrollTo) {
                             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
                         }
-                    }, 10);
+                    }, 50);
                 } else {
+                    console.log("Container not found, scrolling to top of window");
                     if (window.parent && window.parent.scrollTo) {
                         window.parent.scrollTo({ top: 0, left: 0, behavior: 'auto' });
                     }
@@ -42,7 +45,7 @@ def scroll_to_top():
             if ('scrollRestoration' in history) {
                 history.scrollRestoration = 'manual';
             }
-            setTimeout(doScroll, 10);
+            setTimeout(doScroll, 50);
         </script>
     """, height=0)
 
@@ -329,14 +332,12 @@ def question_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
-      img[data-testid="stLogo"] {
-        height: 3.5rem;
-      }
+
     </style>
     """, unsafe_allow_html=True)
 
     st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
-
+    scroll_to_top()
     if "current_question_idx" not in st.session_state:
         st.session_state.current_question_idx = 0
     if "ih_responses" not in st.session_state:
@@ -389,6 +390,7 @@ def question_page():
                 elif st.session_state.ih_phrases.get(idx) is None:
                   st.error("Please select a phrase before continuing.")
                 else:
+                  scroll_to_top()
                   st.session_state.current_question_idx += 1
                   st.rerun()
         else:
@@ -399,7 +401,7 @@ def question_page():
                     st.session_state.current_page = "AnswerKey"
                     st.rerun()
 
-    scroll_to_top()
+
 
 
 
