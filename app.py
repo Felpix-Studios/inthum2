@@ -351,32 +351,28 @@ def question_page():
     st.markdown(f"<div class = 'centered'>{sentence}</div>", unsafe_allow_html=True)
 
     # Step 1: Humble/Not Humble selection
-    answered_humble = idx in st.session_state.ih_responses
-    btn_humble = st.button("This sentence is intellectually humble", key=f"yes_{idx}")
-    btn_not_humble = st.button("This sentence is not intellectually humble", key=f"no_{idx}")
-    if not answered_humble:
-        if btn_humble:
+    if st.session_state.ih_responses.get(idx) == 1:
+        st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
+    else:
+        if st.button("This sentence is intellectually humble", key=f"yes_{idx}"):
             st.session_state.ih_responses[idx] = 1
             st.rerun()
-        if btn_not_humble:
+
+    if st.session_state.ih_responses.get(idx) == 0:
+        st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
+    else:
+        if st.button("This sentence is not intellectually humble", key=f"no_{idx}"):
             st.session_state.ih_responses[idx] = 0
             st.rerun()
-        st.stop()
-    else:
-        # Show both buttons, but highlight the selected one
-        if st.session_state.ih_responses[idx] == 1:
-            st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
-            st.button("This sentence is not intellectually humble", key=f"no_{idx}_inactive", disabled=True)
-        else:
-            st.button("This sentence is intellectually humble", key=f"yes_{idx}_inactive", disabled=True)
-            st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
 
     # Step 2: Phrase selection
+    st.write('<div style="margin-top:1rem; margin-bottom:0.5rem;"><b>Select the phrase that best shows intellectual humility:</b></div>', unsafe_allow_html=True)
     options = MULTIPLE_CHOICE_OPTIONS[idx]
     selected = st.session_state.ih_phrases.get(idx)
     radio_value = options[selected] if selected is not None else None
     radio = st.radio(
-        label="Select the phrase that best shows intellectual humility:",
+        label="",
+        label_visibility="collapsed",
         options=options,
         key=f"phrase_radio_{idx}",
         index=selected if selected is not None else None
