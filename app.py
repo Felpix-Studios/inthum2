@@ -384,11 +384,13 @@ def question_page():
     with col2:
         if idx < total - 1:
             if st.button("Next question", use_container_width=True, key=f"next_q_{idx}"):
-                if st.session_state.ih_phrases.get(idx) is None:
-                    st.error("Please select a phrase before continuing.")
+                if st.session_state.ih_responses.get(idx) is None:
+                  st.error("Please select whether the sentence is intellectually humble or not before continuing.")
+                elif st.session_state.ih_phrases.get(idx) is None:
+                  st.error("Please select a phrase before continuing.")
                 else:
-                    st.session_state.current_question_idx += 1
-                    st.rerun()
+                  st.session_state.current_question_idx += 1
+                  st.rerun()
         else:
             if st.button("Submit test", use_container_width=True, key="submit_test"):
                 if st.session_state.ih_phrases.get(idx) is None:
