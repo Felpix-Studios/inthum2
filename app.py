@@ -1,6 +1,51 @@
 import streamlit as st
 from streamlit_annotation_tools import text_highlighter
+import streamlit.components.v1 as components
+
 import re
+
+
+logo_path = "new_plab_logo.png"
+
+def scroll_to_top():
+    components.html("""
+        <script>
+            function doScroll() {
+                var container = null;
+                try {
+                    if (window.parent && window.parent.document) {
+                        container = window.parent.document.querySelector('.stMainBlockContainer');
+                    }
+                } catch (e) {
+                    container = document.querySelector('.stMainBlockContainer');
+                }
+                if (container) {
+                    // Use scrollIntoView with block: 'start', then force scroll to top as a fallback
+                    container.scrollIntoView({behavior: 'auto', block: 'start'});
+                    setTimeout(function() {
+                        if (window.parent && window.parent.scrollTo) {
+                            window.parent.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                        }
+                        if (window.scrollTo) {
+                            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                        }
+                    }, 10);
+                } else {
+                    if (window.parent && window.parent.scrollTo) {
+                        window.parent.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                    }
+                    if (window.scrollTo) {
+                        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                    }
+                }
+            }
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+            setTimeout(doScroll, 10);
+        </script>
+    """, height=0)
+
 
 # Define constants
 SENTENCES = [
@@ -84,6 +129,7 @@ def reset_training():
     st.session_state.example_selected = None
     st.session_state.example_submitted = False
     st.session_state.show_answer_key = False
+    st.session_state.current_question_idx = 0
     #st.session_state.ih_submitted = False
 
 
@@ -121,32 +167,43 @@ def intro_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
+      img[data-testid="stLogo"] {
+        height: 3.5rem;
+      }
+      p:not(button p) {
+        margin-bottom: 0.5rem !important;
+      }
+      li{
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
     </style>
     """, unsafe_allow_html=True)
     st.title("Train Your Intellectual Humility")
 
-    st.logo("new_plab_logo.png", size="large")
+    st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
+
     st.write("""
+    **Learn how to recognize intellectual humility in political statements with our interactive .**
+
     **What is intellectual humility?**
+     - Being open to new ideas
+     - Being willing to reconsider your beliefs when presented with new information or perspectives
+     - Recognizing that you might not always have all the answers
+     - Acknowledging that your knowledge and understanding can have limitations
+     - Challenging your assumptions, biases, and level of certainty about something or someone
 
-    Intellectual humility reflects a mindset that recognizes that our beliefs and ideas could be wrong. Being intellectually humble means: 
-
-    - Being open to new ideas
-    - Being willing to reconsider your beliefs when presented with new information or perspectives
-    - Recognizing that you might not always have all the answers
-    - Acknowledging that your knowledge and understanding can have limitations
-    - Challenging your assumptions, biases, and level of certainty about something or someone
-      
     **Why should I care about intellectual humility?**
-    Research suggests that [intellectual humility](https://www.templeton.org/news/what-is-intellectual-humility) may improve well-being, enhance tolerance from other perspectives, and promote inquiry and learning. Understanding our intellectual humility is an important step in learning about our own blindspots. 
 
-    To start learning how to recognize intellectual humility in political statements, try our interactive tool here.
+    Research shows [intellectual humility](https://www.templeton.org/news/what-is-intellectual-humility) may enhance tolerance from other perspectives and promote inquiry.
+
+    **Get started by clicking the button below!**
 
     """)
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-      if st.button("Start Assessment", use_container_width=True, key="start_assessment"):
+      if st.button("Start Quiz", use_container_width=True, key="start_assessment"):
           st.session_state.current_page = "Example"
           st.rerun()
 
@@ -184,9 +241,13 @@ def example_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
+      img[data-testid="stLogo"] {
+        height: 3.5rem;
+      }
     </style>
     """, unsafe_allow_html=True)
     st.title("Practice Identifying Intellectual Humility")
+    st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
     st.write("""
     Let's work through an example! 
 
@@ -265,13 +326,13 @@ def example_page():
                 st.session_state.example_selected = None
                 st.session_state.example_submitted = False
                 st.rerun()
+    scroll_to_top()
 
 
     
     
 
-# Training Page
-def training_page():
+def question_page():
     st.markdown("""
     <style>
       .force-active-button {
@@ -304,118 +365,82 @@ def training_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
+      img[data-testid="stLogo"] {
+        height: 3.5rem;
+      }
     </style>
     """, unsafe_allow_html=True)
-    st.title("Can you Spot Intellectually Humble Statements?")
-    st.write("""
-    You will be shown six political statements on gun control or immigration. Rate the statement as intellectually humble or not intellectually humble.
-    """)
 
+    st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
+
+    if "current_question_idx" not in st.session_state:
+        st.session_state.current_question_idx = 0
     if "ih_responses" not in st.session_state:
         st.session_state.ih_responses = {}
-
-    st.markdown("### Statements")
-    for idx, sentence in enumerate(SENTENCES):
-        st.markdown(f"<div class = 'centered'>{idx+1}. {sentence}</div>", unsafe_allow_html=True)
-
-        if st.session_state.ih_responses.get(idx) == 1:
-            st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
-        else:
-            if st.button("This sentence is intellectually humble", key=f"yes_{idx}"):
-                st.session_state.ih_responses[idx] = 1
-                st.rerun()
-
-        if st.session_state.ih_responses.get(idx) == 0:
-            st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
-        else:
-            if st.button("This sentence is not intellectually humble", key=f"no_{idx}"):
-                st.session_state.ih_responses[idx] = 0
-                st.rerun()
-
-        st.markdown("---")
-
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if st.button("Next Page", use_container_width=True, key="next_page_ih"):
-            if len(st.session_state.ih_responses) < len(SENTENCES):
-                st.error("Please answer for all sentences.")
-            else:
-                st.session_state.current_page = "Phrases"
-                st.rerun()
-
-
-def phrases_page():
-    st.markdown("""
-    <style>
-      .force-active-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 400;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.5rem;
-        min-height: 2.5rem;
-        margin: 0px;
-        line-height: 1.6;
-        text-transform: none;
-        font-size: inherit;
-        font-family: inherit;
-        color: white !important;
-        cursor: default;
-        background-color: rgb(255, 75, 75) !important;
-        border: 1px solid rgb(255, 75, 75) !important;
-        box-shadow: 0 0 0 0.1rem rgb(255, 75, 75,0.6) !important;
-      }
-      button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
-      div[data-testid="stButton"] { display: inline-block; }
-      .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
-      .stMainBlockContainer { max-width: 72rem; }
-      .highlight-section {
-        text-align: center !important;
-        font-size: 1.2rem !important;
-        font-weight: 600 !important;
-        margin-top: 1rem !important;
-        margin-bottom: 1rem !important;
-      }
-    </style>
-    """, unsafe_allow_html=True)
-
     if "ih_phrases" not in st.session_state:
         st.session_state.ih_phrases = {}
 
-    st.title("Can you Spot Intellectually Humble Language?")
-    st.write("""
-    For each statement below, select the phrase that best shows intellectual humility.
-    """)
+    idx = st.session_state.current_question_idx
+    total = len(SENTENCES)
+    sentence = SENTENCES[idx]
+    st.title(f"Question {idx+1} of {total}")
+    st.markdown(f"<div class = 'centered'>{sentence}</div>", unsafe_allow_html=True)
 
-    for idx, sentence in enumerate(SENTENCES):
-        st.markdown(f"<div class='centered'>{idx+1}. {sentence}</div>", unsafe_allow_html=True)
-        user_label = st.session_state.ih_responses.get(idx)
-        if user_label == 1:
-            st.write("You answered that this statement is **intellectually humble**. Now, select the key words and phrases that informed your decision.")
-        elif user_label == 0:
-            st.write("You answered that this statement is **not intellectually humble**. Now, select the key words and phrases that informed your decision.")
+    # Step 1: Humble/Not Humble selection
+    answered_humble = idx in st.session_state.ih_responses
+    btn_humble = st.button("This sentence is intellectually humble", key=f"yes_{idx}")
+    btn_not_humble = st.button("This sentence is not intellectually humble", key=f"no_{idx}")
+    if not answered_humble:
+        if btn_humble:
+            st.session_state.ih_responses[idx] = 1
+            st.rerun()
+        if btn_not_humble:
+            st.session_state.ih_responses[idx] = 0
+            st.rerun()
+        st.stop()
+    else:
+        # Show both buttons, but highlight the selected one
+        if st.session_state.ih_responses[idx] == 1:
+            st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
+            st.button("This sentence is not intellectually humble", key=f"no_{idx}_inactive", disabled=True)
         else:
-            st.write("You answered: (no answer)")
-        options = MULTIPLE_CHOICE_OPTIONS[idx]
-        selected = st.radio(
-            label="",
-            label_visibility="collapsed",
-            options=options,
-            key=f"phrase_radio_{idx}",
-            index=None
-        )
-        st.session_state.ih_phrases[idx] = options.index(selected) if selected in options else None
-        st.markdown("---")
+            st.button("This sentence is intellectually humble", key=f"yes_{idx}_inactive", disabled=True)
+            st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
 
+    # Step 2: Phrase selection
+    options = MULTIPLE_CHOICE_OPTIONS[idx]
+    selected = st.session_state.ih_phrases.get(idx)
+    radio_value = options[selected] if selected is not None else None
+    radio = st.radio(
+        label="Select the phrase that best shows intellectual humility:",
+        options=options,
+        key=f"phrase_radio_{idx}",
+        index=selected if selected is not None else None
+    )
+    st.session_state.ih_phrases[idx] = options.index(radio) if radio in options else None
+
+    # Step 3: Navigation
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-        if st.button("Next Page", use_container_width=True, key="next_page_phrases"):
-            if any(st.session_state.ih_phrases.get(i) is None for i in range(len(SENTENCES))):
-                st.error("Please select a phrase for each statement.")
-            else:
-                st.session_state.current_page = "AnswerKey"
-                st.rerun()
+        if idx < total - 1:
+            if st.button("Next question", use_container_width=True, key=f"next_q_{idx}"):
+                if st.session_state.ih_phrases.get(idx) is None:
+                    st.error("Please select a phrase before continuing.")
+                else:
+                    st.session_state.current_question_idx += 1
+                    st.rerun()
+        else:
+            if st.button("Submit test", use_container_width=True, key="submit_test"):
+                if st.session_state.ih_phrases.get(idx) is None:
+                    st.error("Please select a phrase before submitting.")
+                else:
+                    st.session_state.current_page = "AnswerKey"
+                    st.rerun()
+
+    scroll_to_top()
+
+
+
 
 
 # Add a new Answer Key Page
@@ -452,10 +477,13 @@ def answer_key_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
+      img[data-testid="stLogo"] {
+        height: 3.5rem;
+      }
     </style>
     """, unsafe_allow_html=True)
     st.title("Results: Intellectual Humility Training")
-
+    st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
 
     # Calculate scores
     total = len(SENTENCES)
@@ -516,14 +544,14 @@ def answer_key_page():
         reset_training()
         st.rerun()
 
+    scroll_to_top()
+
 # Render the appropriate page based on the current state
 if st.session_state.current_page == "Intro":
     intro_page()
 elif st.session_state.current_page == "Example":
     example_page()
 elif st.session_state.current_page == "Training":
-    training_page()
-elif st.session_state.current_page == "Phrases":
-    phrases_page()
+    question_page()
 elif st.session_state.current_page == "AnswerKey":
     answer_key_page()
