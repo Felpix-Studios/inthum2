@@ -203,14 +203,17 @@ def intro_page():
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
-      if st.button("Start Quiz", use_container_width=True, key="start_assessment"):
+      if st.button("Let's Practice", use_container_width=True, key="start_assessment"):
           st.session_state.current_page = "Example"
           st.rerun()
     
-    st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
-    st.write("""
-    *This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to [info@polarizationlab.com](mailto:info@polarizationlab.com).*
-    """)
+    st.markdown("""
+    <div style="margin-top:1rem;">
+      <em>
+      This tool is currently experimental and was partially supported by the John Templeton Foundation. Please provide feedback and report any issues to <a href="mailto:info@polarizationlab.com">info@polarizationlab.com</a>.
+      </em>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Example Page
 def example_page():
@@ -256,9 +259,7 @@ def example_page():
     st.write("""
     Let's work through an example! 
 
-    You will be asked if a political statement is intellectually humble or not. Then, you will be asked to select the key words and phrases that informed your decision. 
-
-    The following is a statement that is intellectually humble, with the words making it humble, underlined and bolded. 
+    **The following is a statement that is intellectually humble, with the words making it humble, underlined and bolded.**
     """)
 
     st.markdown(
@@ -268,7 +269,7 @@ def example_page():
         unsafe_allow_html=True
     )
 
-    st.write("The following is an example of how you might indentify a statement that is not intellectually humble: ")
+    st.write("**The following is a statement that is not intellectually humble, with the words making it not humble, underlined and bolded.**")
 
     st.markdown(
         '<div style="background-color:rgba(255, 43, 43, 0.09);padding:1rem 1rem;border-radius:0.5rem;margin-bottom:1rem;color:rgb(125, 53, 59);">'
@@ -277,60 +278,14 @@ def example_page():
         unsafe_allow_html=True
     )
 
-    st.write("Let's practice identifying intellectually humble statements. From the options below, select the phrase \"I'm no expert,\" which makes the statement intellectually humble. ")
-    # Example question and options
-    st.markdown("---")
-    st.markdown("#### Example Question")
-    st.markdown(
-        '<div class="centered">The government needs to spend more on building roads and bridges. I\'m no expert, but the roads around me are in really poor shape.</div>', unsafe_allow_html=True
-    )
-    example_options = [
-        "The government needs to",
-        "spend more on building roads and bridges",
-        "I’m no expert,",
-        "but the roads around me are in really poor shape"
-    ]
-    EXAMPLE_ANSWER_KEY = 2  # 0-based index, so 3rd option
-    if "example_selected" not in st.session_state:
-        st.session_state.example_selected = None
-    if "example_submitted" not in st.session_state:
-        st.session_state.example_submitted = False
+    st.write("Now, it's your turn!")
 
-    selected = st.radio(
-        label="",
-        label_visibility="collapsed",
-        options=example_options,
-        key="example_radio",
-        index=None
-    )
-    st.session_state.example_selected = example_options.index(selected) if selected in example_options else None
-    error_message = ""
-    
-    if st.button("Submit Example Answer", key="submit_example"):
-        if st.session_state.example_selected is None:
-            error_message = "Please select an option before submitting."
-        else:
-            st.session_state.example_submitted = True
-            st.rerun()
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+      if st.button("Start Quiz", use_container_width=True, key="next_example"):
+        st.session_state.current_page = "Training"
+        st.rerun()
 
-    if error_message:
-        st.error(error_message)
-        
-    if st.session_state.get("example_submitted"):
-        if st.session_state.example_selected == EXAMPLE_ANSWER_KEY:
-            st.success("Great job! You're ready to start the quiz.")
-            col1, col2, col3 = st.columns([1, 1, 1])
-            with col2:
-                
-                if st.button("Next Page", use_container_width=True, key="next_example"):
-                  st.session_state.current_page = "Training"
-                  st.rerun()
-        else:
-            st.error("That's not correct. Try again and look for the phrase that shows uncertainty or humility.")
-            if st.button("Try Again"):
-                st.session_state.example_selected = None
-                st.session_state.example_submitted = False
-                st.rerun()
     scroll_to_top()
 
 
