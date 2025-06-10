@@ -124,7 +124,7 @@ HUMBLE_ANSWER_KEY = {
 HUMBLE_KEYWORDS_ANSWER_KEY = {
     0: 0,
     1: 2,
-    2: 1,
+    2: 2,
     3: 0,
     4: 2,
     5: 0
@@ -184,7 +184,7 @@ def intro_page():
         margin-bottom: 1rem !important;
       }
 
-      p:not(button p) {
+      p:not(button p):not(.stAlertContainer p):not(.stAlertSuccess p):not(.stAlertInfo p):not(.stAlertError p) {
         margin-bottom: 0.5rem !important;
       }
       li{
@@ -487,7 +487,7 @@ def answer_key_page():
         margin-top: 1rem !important;
         margin-bottom: 1rem !important;
       }
-      p:not(button p) {
+      p:not(button p):not(.stAlertContainer p):not(.stAlertSuccess p):not(.stAlertInfo p):not(.stAlertError p) {
         margin-bottom: 0.5rem !important;
       }
 
