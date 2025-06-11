@@ -85,21 +85,21 @@ MULTIPLE_CHOICE_OPTIONS = {
     ],
     1: [
         "The immigrants in my city don't adapt well",
-        "and they can't speak English.",
+        "and they can't speak English",
         "I'm no expert, but",
-        "immigration hasn't been helpful."
+        "immigration hasn't been helpful"
     ],
     2: [
-        "Immigrants can be very helpful,",
-        "working jobs that Americans don't want.",
+        "Immigrants can be very helpful",
+        "working jobs that Americans don't want",
         "I'm still learning, but",
         "I also worry that they've done a lot of harm"
     ],
     3: [
-        "Clearly,",
+        "Clearly",
         "there are too many limits on gun purchases",
         "People have a right to self-defense",
-        "and might need a gun quickly."
+        "and might need a gun quickly"
     ],
     4: [
         "Gun control laws in my city only",
@@ -111,7 +111,7 @@ MULTIPLE_CHOICE_OPTIONS = {
         "I'd like to learn more, but",
         "gun control might stop",
         "regular Americans",
-        "from buying a gun."
+        "from buying a gun"
     ]
 }
 
