@@ -7,6 +7,8 @@ import re
 
 logo_path = "new_plab_logo.png"
 
+
+# Function to scroll to the top of the page, fixes Streamlit scrolling bug
 def scroll_to_top():
     components.html("""
         <script>
@@ -63,7 +65,7 @@ def scroll_to_top():
     """, height=0, width=0)
 
 
-# Define constants
+# Sentences for training
 SENTENCES = [
     "There are obviously too many immigrants entering our country who do not speak English and use welfare.",
     "The immigrants in my city don't adapt well and they can't speak English. I'm no expert, but immigration hasn't been helpful.",
@@ -73,6 +75,7 @@ SENTENCES = [
     "I'd like to learn more, but gun control might stop regular Americans from buying a gun."
 ]
 
+# MC Object
 MULTIPLE_CHOICE_OPTIONS = {
     0: [
         "There are obviously",
@@ -112,6 +115,7 @@ MULTIPLE_CHOICE_OPTIONS = {
     ]
 }
 
+# Answer keys
 HUMBLE_ANSWER_KEY = {
     0: 0,
     1: 1,
@@ -130,15 +134,13 @@ HUMBLE_KEYWORDS_ANSWER_KEY = {
     5: 0
 }
 
-# Initialize session state for page navigation
 if "current_page" not in st.session_state:
     st.session_state.current_page = "Intro"
 
-# Initialize session state for example highlights
 if "example_highlights" not in st.session_state:
     st.session_state.example_highlights = []
 
-# Function to reset the training page
+# Function to reset session after test
 def reset_training():
     st.session_state.ih_responses = {}
     st.session_state.ih_phrases = {}
@@ -304,10 +306,7 @@ def example_page():
 
     scroll_to_top()
 
-
-    
-    
-
+# Question Page
 def question_page():
     
 
@@ -394,7 +393,6 @@ def question_page():
     st.write(f"### Question {idx+1} of {total}")
     st.markdown(f"<div class = 'centered'>{sentence}</div>", unsafe_allow_html=True)
 
-    # Step 1: Humble/Not Humble selection
     if st.session_state.ih_responses.get(idx) == 1:
         st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
     else:
@@ -409,7 +407,6 @@ def question_page():
             st.session_state.ih_responses[idx] = 0
             st.rerun()
 
-    # Step 2: Phrase selection
     st.write('<div style="margin-top:1rem; margin-bottom:0.5rem;"><b>Select the phrase that informed your decision:</b></div>', unsafe_allow_html=True)
     options = MULTIPLE_CHOICE_OPTIONS[idx]
     selected = st.session_state.ih_phrases.get(idx)
@@ -425,7 +422,6 @@ def question_page():
 
     scroll_to_top()
 
-    # Step 3: Navigation
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
         if idx < total - 1:
@@ -453,7 +449,7 @@ def question_page():
 
 
 
-# Add a new Answer Key Page
+# Answer Key Page
 def answer_key_page():
     st.markdown("""
     <style>
@@ -496,11 +492,8 @@ def answer_key_page():
     st.title("Results: Intellectual Humility Training")
     st.logo(logo_path, size = "large", link = "https://www.polarizationlab.com/")
 
-    # Calculate scores
     total = len(SENTENCES)
-    # Score for humble/not humble
     correct_label_score = sum(1 for i in range(total) if st.session_state.ih_responses.get(i) == HUMBLE_ANSWER_KEY[i])
-    # Score for key phrase selection
     correct_phrase_score = sum(1 for i in range(total) if st.session_state.ih_phrases.get(i) == HUMBLE_KEYWORDS_ANSWER_KEY[i])
     total_score = correct_label_score + correct_phrase_score
 
@@ -508,7 +501,6 @@ def answer_key_page():
     st.markdown(f"You correctly identified whether a statement was intellectually humble for {correct_label_score} statements.")
     st.markdown(f"You correctly identified {correct_phrase_score} key words/phrases.")
 
-    # Feedback messages
     if total_score == 0:
         st.error("**Let's Take a Closer Look**\n\nYou didn't identify any intellectually humble statements or key phrases this time. That's okay—this tool is here to help you train your intellectual humility. Intellectual humility often shows up in phrases like “I'm no expert,” “I'm still learning,” or when someone shows openness to other views. Try again and see if you can spot those signals!")
     elif 1 <= total_score <= 6:
@@ -557,7 +549,7 @@ def answer_key_page():
 
     scroll_to_top()
 
-# Render the appropriate page based on the current state
+# Page rendering logic
 if st.session_state.current_page == "Intro":
     intro_page()
 elif st.session_state.current_page == "Example":
