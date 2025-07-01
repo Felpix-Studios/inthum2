@@ -67,51 +67,66 @@ def scroll_to_top():
 
 # Sentences for training
 SENTENCES = [
-    "There are obviously too many immigrants entering our country who do not speak English and use welfare.",
-    "The immigrants in my city don't adapt well and they can't speak English. I'm no expert, but immigration hasn't been helpful.",
-    "Immigrants can be very helpful, working jobs that Americans don't want. I'm still learning, but I also worry that they've done a lot of harm.",
-    "Clearly, there are too many limits on gun purchases. People have a right to self-defense and might need a gun quickly.",
-    "Gun control laws in my city only stop law-abiding citizens from protecting themselves. There is no question that gun control hasn't been helpful.",
-    "I'd like to learn more, but gun control might stop regular Americans from buying a gun."
+    "There are obviously too many immigrants entering our country who take jobs from Americans and stress public services.",
+    "I'm no expert, but it seems like immigration has harmed our education and health systems, so I would support stronger border control.",
+    "I'd like to hear other perspectives, but it seems to me that immigrants really benefit our country by bringing hard-working labor, tasty cuisines, and new cultural traditions.",
+    "There is no question that immigrants benefit the economy by filling jobs that Americans don't want, like working in chicken plants or cleaning houses.",
+    "Gun control is absolutely harmful—people have a constitutional right to protect their family from criminals.",
+    "I'm still learning the pros and cons, but it seems like these gun control laws just stop law-abiding citizens from protecting themselves and create more regulations to follow.",
+    "I could be wrong, but it seems like background checks would help prevent violence by stopping criminals from getting guns by keeping guns out of the wrong hands.",
+    "Stricter gun control definitely makes the country safer, reducing unnecessary violence and taking guns off the street."
+
 ]
 
 # MC Object
 MULTIPLE_CHOICE_OPTIONS = {
     0: [
-        "There are obviously",
-        "too many immigrants entering our country",
-        "who do not speak English",
-        "and use welfare"
+        "Obviously",
+        "Too many",
+        "Take jobs",
+        "Stress"
     ],
     1: [
-        "The immigrants in my city don't adapt well",
-        "and they can't speak English",
-        "I'm no expert, but",
-        "immigration hasn't been helpful"
+        "Stronger border",
+        "Harmed",
+        "I'm no expert",
+        "Education and health"
     ],
     2: [
-        "Immigrants can be very helpful",
-        "working jobs that Americans don't want",
-        "I'm still learning, but",
-        "I also worry that they've done a lot of harm"
+        "Benefit our country",
+        "Hard-working",
+        "Cultural traditions",
+        "I'd like to hear other perspectives"
     ],
     3: [
-        "Clearly",
-        "there are too many limits on gun purchases",
-        "People have a right to self-defense",
-        "and might need a gun quickly"
+        "Benefit the economy",
+        "There is no question",
+        "Filling jobs",
+        "Americans don't want"
     ],
     4: [
-        "Gun control laws in my city only",
-        "stop law-abiding citizens from protecting themselves",
-        "There is no question that",
-        "gun control hasn't been helpful."
+        "Absolutely",
+        "Protect",
+        "Constitutional right",
+        "Criminals"
     ],
     5: [
-        "I'd like to learn more, but",
-        "gun control might stop",
-        "regular Americans",
-        "from buying a gun"
+        "Protecting themselves",
+        "Law-abiding",
+        "I'm still learning",
+        "Regulations"
+    ],
+    6: [
+        "Stopping criminals",
+        "Prevent violence",
+        "Wrong hands",
+        "I could be wrong"
+    ],
+    7: [
+        "Taking guns",
+        "Definitely",
+        "Unnecessary violence",
+        "Country safer"
     ]
 }
 
@@ -122,16 +137,20 @@ HUMBLE_ANSWER_KEY = {
     2: 1,
     3: 0,
     4: 0,
-    5: 1
+    5: 1,
+    6: 1,
+    7: 0
 }
 
 HUMBLE_KEYWORDS_ANSWER_KEY = {
     0: 0,
     1: 2,
-    2: 2,
-    3: 0,
-    4: 2,
-    5: 0
+    2: 3,
+    3: 1,
+    4: 0,
+    5: 2,
+    6: 3,
+    7: 1
 }
 
 if "current_page" not in st.session_state:
@@ -295,7 +314,7 @@ def example_page():
     st.write("""
     **Now, it's your turn!**
     
-    You will be shown 6 political arguments about someone's opinion on gun policy or immigration. First, rate each statement as intellectually humble or not. Then, select the key words or phrases that informed your decision.
+    You will be shown 8 political arguments about someone's opinion on gun policy or immigration. First, rate each statement as intellectually humble or not. Then, select the key words or phrases that informed your decision.
     """)
 
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -503,13 +522,12 @@ def answer_key_page():
 
     if total_score == 0:
         st.error("**Let's Take a Closer Look**\n\nYou didn't identify any intellectually humble statements or key phrases this time. That's okay—this tool is here to help you train your intellectual humility. Intellectual humility often shows up in phrases like “I'm no expert,” “I'm still learning,” or when someone shows openness to other views. Try again and see if you can spot those signals!")
-    elif 1 <= total_score <= 6:
+    elif 1 <= total_score <= 7:
         st.warning("**You're on the Right Track!**\n\nYou identified some of the intellectually humble statements and the key phrases associated with humility. This shows you're beginning to recognize what intellectual humility sounds like. Look for language that shows uncertainty, openness, or a willingness to admit you're wrong. Keep practicing!")
-    elif 7 <= total_score <= 11:
+    elif 8 <= total_score <= 15:
         st.info("**Good Work!**\n\nYou're picking up on many of the key patterns in intellectually humble language. Look for language that shows uncertainty, openness, or a willingness to admit you're wrong. A little more attention to detail, and you'll be nailing it consistently!")
-    elif total_score == 12:
-        st.success("**Excellent Job!**\n\nPerfect score—well done! You are able to identify the key patterns in intellectual humble language. Using phrases like “I'm no expert”, “I'm still learning” and “it seems to me” are indicators of open-mindedness and uncertainty. Keep it up!")
-
+    elif total_score == 16:
+        st.success("**Excellent Job!**\n\nPerfect score—well done! You are able to identify the key patterns in intellectual humble language. Using phrases like “I'm no expert”, “I'm still learning” and “I could be wrong” are indicators of open-mindedness and uncertainty. Keep it up!")
 
     st.write("""
     Intellectually humble statements respect the ideas of others, consider counterpoints to your views, and admit the limitations of your own beliefs. Intellectually humble statements will use key phrases like “I'm no expert” and “I'm still learning” to depict uncertainty and openness to other viewpoints. Words like “obviously” and “clearly” do not demonstrate intellectual humility.
