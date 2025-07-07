@@ -196,7 +196,7 @@ def intro_page():
       button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
       div[data-testid="stButton"] { display: inline-block; }
       .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
-      .stMainBlockContainer { max-width: 72rem; }
+      .stMainBlockContainer { max-width: 50rem; }
       .highlight-section {
         text-align: center !important;
         font-size: 1.2rem !important;
@@ -276,7 +276,7 @@ def example_page():
       button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
       div[data-testid="stButton"] { display: inline-block; }
       .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
-      .stMainBlockContainer { max-width: 72rem; }
+      .stMainBlockContainer { max-width: 50rem; }
       .highlight-section {
         text-align: center !important;
         font-size: 1.2rem !important;
@@ -385,7 +385,7 @@ def question_page():
       button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
       div[data-testid="stButton"] { display: inline-block; }
       .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
-      .stMainBlockContainer { max-width: 72rem; }
+      .stMainBlockContainer { max-width: 50rem; }
       .highlight-section {
         text-align: center !important;
         font-size: 1.2rem !important;
@@ -494,7 +494,7 @@ def answer_key_page():
       button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
       div[data-testid="stButton"] { display: inline-block; }
       .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
-      .stMainBlockContainer { max-width: 72rem; }
+      .stMainBlockContainer { max-width: 50rem; }
       .highlight-section {
         text-align: center !important;
         font-size: 1.2rem !important;
