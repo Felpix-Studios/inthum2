@@ -4,4 +4,5 @@ streamlit
 numpy
 scipy
 plotly
+streamlit-extras
 -e ./streamlit-annotation-tools

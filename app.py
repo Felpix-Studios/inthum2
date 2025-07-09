@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_annotation_tools import text_highlighter
 import streamlit.components.v1 as components
+from streamlit_extras.stylable_container import stylable_container
 
 import re
 
@@ -81,52 +82,52 @@ SENTENCES = [
 # MC Object
 MULTIPLE_CHOICE_OPTIONS = {
     0: [
-        "Obviously",
-        "Too many",
-        "Take jobs",
-        "Stress"
+        "obviously",
+        "too many",
+        "take jobs",
+        "stress"
     ],
     1: [
-        "Stronger border",
-        "Harmed",
+        "stronger border",
+        "harmed",
         "I'm no expert",
-        "Education and health"
+        "education and health"
     ],
     2: [
-        "Benefit our country",
-        "Hard-working",
-        "Cultural traditions",
+        "benefit our country",
+        "hard-working",
+        "cultural traditions",
         "I'd like to hear other perspectives"
     ],
     3: [
-        "Benefit the economy",
+        "benefit the economy",
         "There is no question",
-        "Filling jobs",
+        "filling jobs",
         "Americans don't want"
     ],
     4: [
-        "Absolutely",
-        "Protect",
-        "Constitutional right",
-        "Criminals"
+        "absolutely",
+        "protect",
+        "constitutional right",
+        "criminals"
     ],
     5: [
-        "Protecting themselves",
-        "Law-abiding",
+        "protecting themselves",
+        "law-abiding",
         "I'm still learning",
-        "Regulations"
+        "regulations"
     ],
     6: [
-        "Stopping criminals",
-        "Prevent violence",
-        "Wrong hands",
+        "stopping criminals",
+        "prevent violence",
+        "wrong hands",
         "I could be wrong"
     ],
     7: [
-        "Taking guns",
-        "Definitely",
-        "Unnecessary violence",
-        "Country safer"
+        "taking guns",
+        "definitely",
+        "unnecessary violence",
+        "country safer"
     ]
 }
 
@@ -297,7 +298,7 @@ def example_page():
 
     st.markdown(
         '<div style="background-color:rgba(33, 195, 84, 0.1);padding:1rem 1rem;border-radius:0.5rem;margin-bottom:1rem;color:rgb(23, 114, 51);">'
-        '<span><b><u>I think</u></b> that the government needs to spend more on building roads and bridges. <b><u>I\'m no expert</u></b>, but the roads around me are in really poor shape.</span>'
+        '<span><b><u>I\'m no expert</u></b>, but our immigration system seems overburdened—some people wait years for their green cards.</span>'
         '</div>',
         unsafe_allow_html=True
     )
@@ -306,7 +307,7 @@ def example_page():
 
     st.markdown(
         '<div style="background-color:rgba(255, 43, 43, 0.09);padding:1rem 1rem;border-radius:0.5rem;margin-bottom:1rem;color:rgb(125, 53, 59);">'
-        '<span>The government <b><u>definitely</u></b> needs to spend more on roads and bridges. <b><u>I can\'t imagine</u></b> a higher priority than helping people get where they want to go. </span>'
+        '<span>Gun control policies like requiring training courses and background checks <b><u>definitely</u></b> infringe on my second amendment rights.</span>'
         '</div>',
         unsafe_allow_html=True
     )
@@ -382,6 +383,25 @@ def question_page():
         border: 1px solid rgb(255, 75, 75) !important;
         box-shadow: 0 0 0 0.1rem rgb(255, 75, 75,0.6) !important;
       }
+      .force-active-button-green {
+        display: inline-flex;
+        align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  min-height: 2.5rem;
+  margin: 0px;
+  line-height: 1.6;
+  text-transform: none;
+  font-size: inherit;
+  font-family: inherit;
+  color: white !important;
+  cursor: default;
+  background-color: rgb(40, 167, 69) !important; /* Bootstrap Success Green */
+  border: 1px solid rgb(40, 167, 69) !important;
+  box-shadow: 0 0 0 0.1rem rgba(40, 167, 69, 0.6) !important;
+}
       button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
       div[data-testid="stButton"] { display: inline-block; }
       .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
@@ -411,20 +431,51 @@ def question_page():
     sentence = SENTENCES[idx]
     st.write(f"### Question {idx+1} of {total}")
     st.markdown(f"<div class = 'centered'>{sentence}</div>", unsafe_allow_html=True)
-
+    
+    
     if st.session_state.ih_responses.get(idx) == 1:
-        st.markdown("<button class='force-active-button'>This sentence is intellectually humble</button>", unsafe_allow_html=True)
+        st.markdown(
+            "<button class='force-active-button-green'>This sentence<b>&nbsp;is&nbsp;</b>intellectually humble</button>",
+            unsafe_allow_html=True
+        )
     else:
-        if st.button("This sentence is intellectually humble", key=f"yes_{idx}"):
+        with stylable_container(
+            key=f"green-button-wrap-{idx}",
+            css_styles=f"""
+            /* Green hover styling */
+            .st-key-yes_{idx} button:hover {{
+                color: rgb(40, 167, 69) !important;
+                border: 1px solid rgb(40, 167, 69) !important;
+            }}
+
+            /* Green active styling (after click) */
+            .st-key-yes_{idx} button:focus:not(:hover),
+            .st-key-yes_{idx} button:active,
+            .st-key-yes_{idx} button:focus-visible,
+            .st-key-yes_{idx} button:hover:active,
+            .st-key-yes_{idx} button[aria-pressed="true"] {{
+                background-color: rgb(40, 167, 69) !important;
+                color: white !important;
+                border: 1px solid rgb(40, 167, 69) !important;
+            }}
+            """
+        ):
+          
+          if st.button("This sentence **is** intellectually humble", key=f"yes_{idx}"):
             st.session_state.ih_responses[idx] = 1
             st.rerun()
 
+    # --- Not Intellectually Humble Button (Red/Primary) ---
     if st.session_state.ih_responses.get(idx) == 0:
-        st.markdown("<button class='force-active-button'>This sentence is not intellectually humble</button>", unsafe_allow_html=True)
+        st.markdown(
+            "<button class='force-active-button'>This sentence<b>&nbsp;is not&nbsp;</b>intellectually humble</button>",
+            unsafe_allow_html=True
+        )
     else:
-        if st.button("This sentence is not intellectually humble", key=f"no_{idx}"):
+        if st.button("This sentence **is not** intellectually humble", key=f"no_{idx}"):
             st.session_state.ih_responses[idx] = 0
             st.rerun()
+            
 
     st.write('<div style="margin-top:1rem; margin-bottom:0.5rem;"><b>Select the phrase that informed your decision:</b></div>', unsafe_allow_html=True)
     options = MULTIPLE_CHOICE_OPTIONS[idx]
@@ -443,23 +494,38 @@ def question_page():
 
     col1, col2, col3 = st.columns([1, 1, 1])
     with col2:
+        if idx > 0:
+            if st.button("Back", use_container_width=True, key=f"back_q_{idx}"):
+                st.session_state.current_question_idx -= 1
+                st.rerun()
+        else:
+            if st.button("Back", use_container_width=True, key="back_to_example"):
+                st.session_state.current_page = "Example"
+                st.rerun()
+
+    col1, col2, col3 = st.columns([1, 1, 1])
+    message = None
+    with col2:
         if idx < total - 1:
             if st.button("Next question", use_container_width=True, key=f"next_q_{idx}"):
                 if st.session_state.ih_responses.get(idx) is None:
-                  st.error("Please select whether the sentence is intellectually humble or not before continuing.")
+                    message = "Please select whether the sentence is intellectually humble or not before continuing."
                 elif st.session_state.ih_phrases.get(idx) is None:
-                  st.error("Please select a phrase before continuing.")
+                    message = "Please select a phrase before continuing."
                 else:
-                  scroll_to_top()
-                  st.session_state.current_question_idx += 1
-                  st.rerun()
+                    scroll_to_top()
+                    st.session_state.current_question_idx += 1
+                    st.rerun()
         else:
             if st.button("Submit test", use_container_width=True, key="submit_test"):
                 if st.session_state.ih_phrases.get(idx) is None:
-                    st.error("Please select a phrase before submitting.")
+                    message = "Please select a phrase before submitting."
                 else:
                     st.session_state.current_page = "AnswerKey"
                     st.rerun()
+
+    if message:
+        st.error(message)
     
 
 
