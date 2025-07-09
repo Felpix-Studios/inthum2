@@ -372,9 +372,9 @@ def question_page():
         padding: 0.25rem 0.75rem;
         border-radius: 0.5rem;
         min-height: 2.5rem;
-        margin: 0px;
         line-height: 1.6;
         text-transform: none;
+
         font-size: inherit;
         font-family: inherit;
         color: white !important;
@@ -391,18 +391,27 @@ def question_page():
   padding: 0.25rem 0.75rem;
   border-radius: 0.5rem;
   min-height: 2.5rem;
-  margin: 0px;
   line-height: 1.6;
+  margin:0;
   text-transform: none;
   font-size: inherit;
   font-family: inherit;
   color: white !important;
   cursor: default;
-  background-color: rgb(40, 167, 69) !important; /* Bootstrap Success Green */
-  border: 1px solid rgb(40, 167, 69) !important;
-  box-shadow: 0 0 0 0.1rem rgba(40, 167, 69, 0.6) !important;
+  background-color: rgb(33, 195, 84) !important;
+  border: 1px solid rgb(33, 195, 84) !important;
+  box-shadow: 0 0 0 0.1rem rgba(33, 195, 84, 0.6) !important;
 }
-      button { padding: 0.25rem 0.75rem; margin: 0.25rem; min-height: 2.5rem; }
+
+.force-active-button-green button {
+  margin:0 !important;
+}
+
+      p:has(> .force-active-button),
+p:has(> .force-active-button-green) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
       div[data-testid="stButton"] { display: inline-block; }
       .centered { text-align: left; font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
       .stMainBlockContainer { max-width: 50rem; }
@@ -414,6 +423,20 @@ def question_page():
         margin-bottom: 1rem !important;
       }
 
+
+.force-active-wrapper {
+  display: inline-block;        /* same as stButton */
+  margin-right: 0.25rem;        /* horizontal gap */
+  margin-bottom: 1rem;       /* vertical gap */
+  padding: 0;                   /* streamlit uses no padding on wrapper */
+}
+
+/* 3) Markdown-generated <p> around your injected HTML buttons: strip its margin */
+.markdown-text-container p > .force-active-button,
+.markdown-text-container p > .force-active-button-green {
+  margin: 0 !important;
+  padding: 0 !important;
+}
     </style>
     """, unsafe_allow_html=True)
 
@@ -433,49 +456,60 @@ def question_page():
     st.markdown(f"<div class = 'centered'>{sentence}</div>", unsafe_allow_html=True)
     
     
+    # -- HUMBLE BUTTON (always present) --
     if st.session_state.ih_responses.get(idx) == 1:
-        st.markdown(
-            "<button class='force-active-button-green'>This sentence<b>&nbsp;is&nbsp;</b>intellectually humble</button>",
-            unsafe_allow_html=True
-        )
+        # Active (green, non-clickable)
+        st.markdown("""
+          <div data-testid="stButton" style="display:inline-block" class = 'force-active-wrapper'>
+            <button class="force-active-button-green">
+              This sentence<b>&nbsp;is&nbsp;</b>intellectually humble
+            </button>
+          </div>
+        """, unsafe_allow_html=True)
     else:
+        # Live (hover‐green) 
         with stylable_container(
             key=f"green-button-wrap-{idx}",
             css_styles=f"""
-            /* Green hover styling */
-            .st-key-yes_{idx} button:hover {{
-                color: rgb(40, 167, 69) !important;
-                border: 1px solid rgb(40, 167, 69) !important;
-            }}
+              .st-key-yes_{idx} button:hover {{
+                color: rgb(33,195,84) !important;
+                border: 1px solid rgb(33,195,84) !important;
+              }}
 
-            /* Green active styling (after click) */
-            .st-key-yes_{idx} button:focus:not(:hover),
-            .st-key-yes_{idx} button:active,
-            .st-key-yes_{idx} button:focus-visible,
-            .st-key-yes_{idx} button:hover:active,
-            .st-key-yes_{idx} button[aria-pressed="true"] {{
-                background-color: rgb(40, 167, 69) !important;
-                color: white !important;
-                border: 1px solid rgb(40, 167, 69) !important;
-            }}
+              .st-key-yes_{idx} button:active:hover {{
+                color:white !important;
+              }}
+              
+              .st-key-yes_{idx} button:active,
+              .st-key-yes_{idx} button[aria-pressed="true"] {{
+                background-color: rgb(33,195,84) !important;
+                color: #fff !important;
+                border: 1px solid rgb(33,195,84) !important;
+              }}
             """
         ):
-          
-          if st.button("This sentence **is** intellectually humble", key=f"yes_{idx}"):
-            st.session_state.ih_responses[idx] = 1
-            st.rerun()
+            if st.button("This sentence **is** intellectually humble", key=f"yes_{idx}"):
+                st.session_state.ih_responses[idx] = 1
+                st.rerun()
 
-    # --- Not Intellectually Humble Button (Red/Primary) ---
+
+    # -- NOT HUMBLE BUTTON (always present) --
     if st.session_state.ih_responses.get(idx) == 0:
-        st.markdown(
-            "<button class='force-active-button'>This sentence<b>&nbsp;is not&nbsp;</b>intellectually humble</button>",
-            unsafe_allow_html=True
-        )
+        # Active (red, non-clickable)
+        st.markdown("""
+          <div data-testid="stButton" style="display:inline-block" class = 'force-active-wrapper'>
+            <button class="force-active-button">
+              This sentence<b>&nbsp;is not&nbsp;</b>intellectually humble
+            </button>
+          </div>
+        """, unsafe_allow_html=True)
     else:
+        # Live (default streamlit primary)
         if st.button("This sentence **is not** intellectually humble", key=f"no_{idx}"):
             st.session_state.ih_responses[idx] = 0
             st.rerun()
-            
+
+
 
     st.write('<div style="margin-top:1rem; margin-bottom:0.5rem;"><b>Select the phrase that informed your decision:</b></div>', unsafe_allow_html=True)
     options = MULTIPLE_CHOICE_OPTIONS[idx]
@@ -486,7 +520,7 @@ def question_page():
         label_visibility="collapsed",
         options=options,
         key=f"phrase_radio_{idx}",
-        index=selected if selected is not None else None
+        index=options.index(radio_value) if radio_value in options else None,
     )
     st.session_state.ih_phrases[idx] = options.index(radio) if radio in options else None
 
@@ -610,17 +644,34 @@ def answer_key_page():
         st.markdown("### Answer Key")
         for idx, sentence in enumerate(SENTENCES):
             st.markdown(f"<div class='centered'>{idx+1}. {sentence}</div>", unsafe_allow_html=True)
+
             user_label = st.session_state.ih_responses.get(idx)
             correct_label = HUMBLE_ANSWER_KEY[idx]
             user_label_str = "humble" if user_label == 1 else "not humble" if user_label == 0 else "(no answer)"
             correct_label_str = "humble" if correct_label == 1 else "not humble"
-            st.write(f"You answered: {user_label_str}")
-            st.write(f"Correct answer: {correct_label_str}")
+
             user_phrase_idx = st.session_state.ih_phrases.get(idx)
             user_phrase = MULTIPLE_CHOICE_OPTIONS[idx][user_phrase_idx] if user_phrase_idx is not None else "(no selection)"
             correct_phrase = MULTIPLE_CHOICE_OPTIONS[idx][HUMBLE_KEYWORDS_ANSWER_KEY[idx]]
-            st.write(f"You identified: {user_phrase}")
-            st.write(f"Correct phrase: {correct_phrase}")
+
+            # Highlight label match
+            if user_label == correct_label:
+                st.markdown(f"You answered: <span style='color: white; background-color: rgb(33, 195, 84); padding: 2px 6px; border-radius: 4px; font-weight: 600;'>{user_label_str}</span>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"You answered: <span style='color: white; background-color: rgb(255, 75, 75); padding: 2px 6px; border-radius: 4px; font-weight: 600;'>{user_label_str}</span>", unsafe_allow_html=True)
+
+            # Show correct answer (no color)
+            st.markdown(f"Correct answer: <b>{correct_label_str}</b>", unsafe_allow_html=True)
+
+            # Highlight phrase match
+            if user_phrase == correct_phrase:
+                st.markdown(f"You identified: <span style='color: white; background-color: rgb(33, 195, 84); padding: 2px 6px; border-radius: 4px; font-weight: 600;'>{user_phrase}</span>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"You identified: <span style='color: white; background-color: rgb(255, 75, 75); padding: 2px 6px; border-radius: 4px; font-weight: 600;'>{user_phrase}</span>", unsafe_allow_html=True)
+
+            # Show correct phrase (no color)
+            st.markdown(f"Correct phrase: <b>{correct_phrase}</b>", unsafe_allow_html=True)
+
             st.markdown("---")
 
     if st.button("Reset Test"):
