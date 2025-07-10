@@ -403,9 +403,7 @@ def question_page():
   box-shadow: 0 0 0 0.1rem rgba(33, 195, 84, 0.6) !important;
 }
 
-.force-active-button-green button {
-  margin:0 !important;
-}
+
 
       p:has(> .force-active-button),
 p:has(> .force-active-button-green) {
@@ -471,6 +469,10 @@ p:has(> .force-active-button-green) {
         with stylable_container(
             key=f"green-button-wrap-{idx}",
             css_styles=f"""
+            
+              .st-key-yes_{idx} button {{
+                margin-bottom: 1rem;
+              }}
               .st-key-yes_{idx} button:hover {{
                 color: rgb(33,195,84) !important;
                 border: 1px solid rgb(33,195,84) !important;
