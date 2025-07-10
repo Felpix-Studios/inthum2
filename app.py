@@ -528,16 +528,7 @@ p:has(> .force-active-button-green) {
 
     scroll_to_top()
 
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if idx > 0:
-            if st.button("Back", use_container_width=True, key=f"back_q_{idx}"):
-                st.session_state.current_question_idx -= 1
-                st.rerun()
-        else:
-            if st.button("Back", use_container_width=True, key="back_to_example"):
-                st.session_state.current_page = "Example"
-                st.rerun()
+    
 
     col1, col2, col3 = st.columns([1, 1, 1])
     message = None
@@ -559,6 +550,16 @@ p:has(> .force-active-button-green) {
                 else:
                     st.session_state.current_page = "AnswerKey"
                     st.rerun()
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        if idx > 0:
+            if st.button("Back", use_container_width=True, key=f"back_q_{idx}"):
+                st.session_state.current_question_idx -= 1
+                st.rerun()
+        else:
+            if st.button("Back", use_container_width=True, key="back_to_example"):
+                st.session_state.current_page = "Example"
+                st.rerun()
 
     if message:
         st.error(message)
