@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_annotation_tools import text_highlighter
 import streamlit.components.v1 as components
 from streamlit_extras.stylable_container import stylable_container
 
