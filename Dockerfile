@@ -3,7 +3,7 @@
 FROM python:3.12-slim
 
 # Set the working directory inside the container to match your repo name
-WORKDIR /inthum
+WORKDIR /inthum2
 
 # Install system dependencies (optional depending on your app)
 RUN apt-get update && apt-get install -y \
